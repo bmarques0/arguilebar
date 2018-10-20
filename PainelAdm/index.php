@@ -126,7 +126,7 @@ if (!$conn) {
                   </div>
                   <div class="mr-5">Produtos</div>
                 </div>
-                <a class="card-footer text-white clearfix small z-1" href="produto.php">
+                <a class="card-footer text-white clearfix small z-1" href="produtoEssencia.php">
                   <span class="float-left">Gerenciar Produtos</span>
                   <span class="float-right">
                     <i class="fas fa-angle-right"></i>
