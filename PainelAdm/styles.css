@@ -1,0 +1,31 @@
+#header {
+	text-align: center;
+	border: 5px solid ;
+}
+
+#left{
+	text-align: left;
+	border: 2px solid;
+	height: 100%;
+	font-size: x-large;
+	font-family: serif;
+}
+
+#right{
+	text-align: center;
+	align-content: center;
+	border: 2px solid;
+	height: 100%
+}
+
+ul.nav-navbar-nav  li.nav-item:hover ul.nav-item
+{ 
+    display: block; 
+}
+
+/*#form{
+	width: 500px;
+    border: 1px solid #c3c3c3;
+    text-align: center;  
+}*/
+

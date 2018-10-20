@@ -1,0 +1,143 @@
+<?php 
+	
+	$conn = mysqli_connect($servername,$username,$password,$dbname);
+	if (!$conn) {
+	  die("Problemas ao conectar com o BD!<br>".
+	       mysqli_connect_error());
+	}
+
+
+	if ($_SERVER["REQUEST_METHOD"] == "GET") {
+	  if (isset($_GET["nome"])) {
+	    $nome = sanitize($_GET["nome"]);
+	    $nome = mysqli_real_escape_string($conn, $nome);
+	    
+
+	    $disciplinaid = soNumero($disciplinaid);
+
+	    $sql = "INSERT INTO `produto` (`nome`, `marca`, `preco`) VALUES ('$nome', '$marca', '$preco');";
+
+	    if(!mysqli_query($conn,$sql)){
+	      die("Problemas para inserir nova disciplina no BD!<br>".
+	           mysqli_error($conn));
+	    }
+	  }
+	}
+
+	$sql = "SELECT * FROM `categoria` ";
+	if(!($categorias = mysqli_query($conn,$sql))){
+	  die("Problemas para carregar as categorias do BD!<br>".
+	       mysqli_error($conn));
+	}
+	
+ 
+
+
+	mysqli_close($conn); 
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+<title></title>
+<style>    
+    
+    
+ </style>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<!-------------------------------------------- CABEÇALHO ------------------------------------>
+		<div class="row">
+			<div class="navbar navbar-inverse" id="header"><h1>HOOKAH BAR</h1></div>		
+		</div>
+		<div class="row">
+		<!-------------------------------------------- Menu ------------------------------------>
+			
+			
+				<div class="col-xs-2 col-md-2" id="left">
+						<ul class="nav nav-pills" role="tablist">
+						  <li class="nav-item">
+						    <a class="active" href="#">Home</a>
+						  </li>
+						  <li class="nav-item">
+						    <a href="#">Arguile</a>
+						  </li>
+						  <li class="nav-item">
+						    <a href="#">Produto</a>
+						  </li>
+						  <li class="nav-item">
+						    <a href="#">Funcionário</a>
+						  </li>
+						  <li class="nav-item">
+						    <a href="#">Venda</a>
+						  </li>
+						  <li class="nav-item">
+						    <a href="#">Sair</a>
+						  </li>
+						</ul>
+				</div>
+
+
+
+			<!----------------------------------------- Conteudo------------------------------------------>
+  			<div class="col-xs-10 col-md-10" id="right">
+  				<div class="row">
+  					<div class="col-md-2 col-lg-2">
+	                </div>
+	                <div class="col-md-8 col-lg-8">
+	                  <div class="well">
+	                  <h3> Cadastrar Produto</h3>
+	                  </div>
+	                </div>
+	                <div class="col-md-2 col-lg-2">
+	          		</div>
+              	</div>
+
+              	<div class="row">
+              		<div class="col-md-3 col-lg-3">
+	                </div>
+	                <div class="row">
+	                	<div class="col-md-6 col-lg-6">
+							<form  method="GET" action="" id="form"> 	
+								<!-- <div class="form-group input-group"> -->
+								<label for="exampleFormControlInput1">Nome do Produto</label>
+								<input type="email" class="form-control" id="nomeProduto" placeholder="Produto">  
+								<!-- </div> -->
+								<div class="form-group">
+								  <label for="exampleFormControlSelect1">Categoria</label>
+								  <select class="form-control" id="categoriaProduto">
+								  	
+								    <option>Essencia</option>
+								    <option>Arguile</option>
+								    <option>Carvao</option>
+								    <option>Bebida</option>		
+								   </select>
+								  </div>
+								  <div class="form-group">
+								    <!-- <div class="form-group input-group"> -->
+									<label for="exampleFormControlInput1">Preço</label>
+									<input type="email" class="form-control" id="preçoProduto" placeholder="Produto"> 
+								  </div>
+								 
+							</form>
+							<div class = "pull-right">
+								<button type="submit" class="btn btn-primary">Cadastrar</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-3 col-lg-3">
+	                </div>
+  		</div>
+	</div>
+	<footer class="container-fluid text-center">
+ 		<p><h3>Arguile Expert<h3></p>
+	</footer>
+</body>
+</html>

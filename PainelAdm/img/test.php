@@ -1,0 +1,6 @@
+<? 
+
+
+int phpinfo ([ int $what ] )
+
+ ?>
