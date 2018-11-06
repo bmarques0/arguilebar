@@ -67,4 +67,18 @@
         android:layout_marginTop="175dp"
         android:background="?android:attr/listDivider" />
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom">
+
+        <Button
+            android:id="@+id/selecionarPedidoId"
+            android:onClick="selecionarPedido"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Selecionar" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

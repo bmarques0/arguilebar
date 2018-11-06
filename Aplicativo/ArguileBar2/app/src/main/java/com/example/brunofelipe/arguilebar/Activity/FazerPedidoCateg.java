@@ -18,6 +18,10 @@ public class FazerPedidoCateg extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fazer_pedido_categ);
 
+
+    }
+
+    public void fazerPedido (View view) {
         idImageSessao = (ImageButton) findViewById(R.id.idImageSessao);
         idImageSessao.setOnClickListener(new View.OnClickListener() {
 

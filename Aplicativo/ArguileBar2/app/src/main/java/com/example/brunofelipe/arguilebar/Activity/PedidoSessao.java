@@ -1,13 +1,17 @@
 package com.example.brunofelipe.arguilebar.Activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.support.v7.widget.SearchView;
 import android.widget.RadioButton;
@@ -15,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.brunofelipe.arguilebar.R;
 
 import org.w3c.dom.Text;
@@ -29,6 +34,9 @@ public class PedidoSessao extends AppCompatActivity {
     String[] description;
     int[] icon;
     ArrayList<ModelItem> arrayList = new ArrayList<ModelItem>();
+    ImageButton imageProduto;
+    ElegantNumberButton btn;
+    Button btnSelecionar;
 
 
     @Override
@@ -57,6 +65,7 @@ public class PedidoSessao extends AppCompatActivity {
 
         //vincular o adapter com a lista
         listViewSessao.setAdapter(adpter);
+
 
     }
 
@@ -114,6 +123,65 @@ public class PedidoSessao extends AppCompatActivity {
             radioInteiro.setChecked(true);
             radioMeio.setChecked(false);
         }
+
+    }
+
+    public void DetalheProduto (View view) {
+
+
+        //onClick foto produto para detalhes do produto
+        imageProduto = (ImageButton) findViewById(R.id.mainIcon);
+        imageProduto.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(PedidoSessao.this, DetalhesProduto.class);
+                startActivity(it);
+            }
+
+        });
+
+    }
+
+
+    public void onClickNumberButton (View view) {
+
+        btn = (ElegantNumberButton) findViewById(R.id.btnNumberId);
+        btn.setOnClickListener(new ElegantNumberButton.OnClickListener() {
+
+
+            @Override
+            public void onClick(View view) {
+
+                String num = btn.getNumber();
+                Log.e("NUM", num);
+
+                //apresentar somente 1/2 e 1.
+
+
+            }
+        });
+
+    }
+
+    public void selecionarPedido (View view) {
+
+        btn = (ElegantNumberButton) findViewById(R.id.btnNumberId);
+        btnSelecionar = (Button) findViewById(R.id.selecionarPedidoId);
+
+        btnSelecionar.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(PedidoSessao.this, DetalhesProduto.class);
+                startActivity(it);
+            }
+
+        });
+
+
+
 
     }
 }

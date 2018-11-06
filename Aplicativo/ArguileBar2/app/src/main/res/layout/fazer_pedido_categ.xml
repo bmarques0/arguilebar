@@ -69,7 +69,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/home4"
-                    android:onClick="fazerPedido"/>
+                    android:onClick="fazerPedido"
+                    />
 
             </LinearLayout>
 
@@ -110,7 +111,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/bebidas" />
+                    android:src="@drawable/bebidas"
+                    android:scaleType="centerCrop"/>
 
             </LinearLayout>
 
@@ -141,7 +143,8 @@
                     android:id="@+id/idTextViewBebidaAlcool"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sessão"
+                    android:text="Bebidas Alcólicas"
+                    android:textSize="14dp"
                     android:textColor="@android:color/white"
                     android:textAlignment="center"
                     />
@@ -151,7 +154,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/home4" />
+                    android:src="@drawable/bebidas" />
 
             </LinearLayout>
 
@@ -183,7 +186,7 @@
                     android:id="@+id/idTextViewComida"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sessão"
+                    android:text="Comidas"
                     android:textColor="@android:color/white"
                     android:textAlignment="center"
                     />
@@ -193,7 +196,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/home4" />
+                    android:src="@drawable/home4"
+                    android:scaleType="centerCrop"/>
 
             </LinearLayout>
 

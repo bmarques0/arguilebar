@@ -19,9 +19,12 @@
         <activity
             android:name=".Activity.FazerPedidoCateg"
             android:label="@string/title_activity_fazer_pedido_categ"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Activity.PedidoSessao"
-            android:parentActivityName=".Activity.FazerPedidoCateg"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.PedidoSessao"
+            android:parentActivityName=".Activity.FazerPedidoCateg" />
+        <activity android:name=".Activity.DetalhesProduto"
+            android:parentActivityName=".Activity.PedidoSessao" ></activity>
     </application>
 
 </manifest>

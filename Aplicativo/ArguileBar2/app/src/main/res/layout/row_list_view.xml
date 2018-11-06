@@ -9,11 +9,14 @@
     android:gravity="start"
     android:padding="5dp">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/mainIcon"
         android:src="@drawable/home7"
         android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:onClick="DetalheProduto"
+        android:scaleType="fitCenter"
+        />
 
     <LinearLayout
         android:layout_width="188dp"
@@ -57,7 +60,9 @@
         android:id="@+id/btnNumberId"
         android:layout_width="70dp"
         android:layout_height="30dp"
-        android:layout_gravity="start"/>
+        android:layout_gravity="start"
+        android:onClick="onClickNumberButton"
+        />
 
     <ListView
         android:id="@+id/listViewSessao"
