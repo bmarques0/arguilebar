@@ -1,7 +1,6 @@
 <?php
 require 'db_credentials.php';
 require 'authenticate.php';
-require 'lib/sanitize.php';
 
 if(!$login){
   header("Location: " . dirname($_SERVER['SCRIPT_NAME']) . "/login.php");}
@@ -20,21 +19,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 
         $mysqlImg="";
         $imagem = $_FILES["image"];
-
-        $marcaEssencia = sanitize($_GET["marcaEssencia"]);
-        $marcaEssencia = mysqli_real_escape_string($conn,$marcaEssencia);
-
-        $preçoEssencia = sanitize(($_GET["preçoEssencia"]));
-        $preçoEssencia = mysqli_real_escape_string($conn,$preçoEssencia);
+        $marcaEssencia = ($_GET["marcaEssencia"]);
+        $preçoEssencia = ($_GET["preçoEssencia"]);
+        $saborEssencia = ($_GET["saborEssencia"]);
+        $categoriaEssencia = ($_GET["categoriaEssencia"]);
         
-        $saborEssencia = sanitize(($_GET["saborEssencia"]));
-        $saborEssencia = mysqli_real_escape_string($conn,$saborEssencia);
-
-        $categoriaEssencia = sanitize(($_GET["categoriaEssencia"]));
-        $categoriaEssencia = mysqli_real_escape_string($conn,$categoriaEssencia);
-
-        $quantidadeEssencia = sanitize(($_GET["quantidadeEssencia"]));
-        $quantidadeEssencia = mysqli_real_escape_string($conn,$quantidadeEssencia);
 
         if($imagem != null){
           $nomeFinal = time().'.jpg';
@@ -52,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
           echo "Preencha um dos campos";
         }elseif(!empty(($_GET["marcaEssencia"])) and !empty($preçoEssencia) and !empty(($_GET["saborEssencia"])) and !empty(($_GET["categoriaEssencia"]))) {
 
+          $bt = $_GET["cadastrar"];
 
           $sql = "INSERT into essencia(`categoria`,`marca`,`preco`,`sabor`,`essenciaImg`) values ('$categoriaEssencia', '$marcaEssencia', '$preçoEssencia', '$saborEssencia', '$mysqlImg')";
           unlink($imagem);
@@ -68,33 +58,28 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
        
       $bt = $_GET["pesquisar"];
 
-      $marcaEssencia = sanitize($_GET["marcaEssencia"]);
-      $marcaEssencia = mysqli_real_escape_string($conn,$marcaEssencia);
+      $marcaEssencia = ($_GET["marcaEssencia"]);
+      $preçoEssencia = ($_GET["preçoEssencia"]);
+      $saborEssencia = ($_GET["saborEssencia"]);
+      $categoriaEssencia = ($_GET["categoriaEssencia"]);
 
-      $preçoEssencia = sanitize(($_GET["preçoEssencia"]));
-      $preçoEssencia = mysqli_real_escape_string($conn,$preçoEssencia);
-      
-      $saborEssencia = sanitize(($_GET["saborEssencia"]));
-      $saborEssencia = mysqli_real_escape_string($conn,$saborEssencia);
-
-      $categoriaEssencia = sanitize(($_GET["categoriaEssencia"]));
-      $categoriaEssencia = mysqli_real_escape_string($conn,$categoriaEssencia);
-
-      $quantidadeEssencia = sanitize(($_GET["quantidadeEssencia"]));
-      $quantidadeEssencia = mysqli_real_escape_string($conn,$quantidadeEssencia);
-
-      if(empty($marcaEssencia) and empty($preçoEssencia) and empty($saborEssencia) and empty($categoriaEssencia) and empty($quantidadeEssencia)) {
+      if(empty($marcaEssencia) and empty($preçoEssencia) and empty($saborEssencia) and empty($categoriaEssencia)) {
         $sql = "SELECT * from essencia";
           if(!($essencias = mysqli_query($conn,$sql))){
             die("Problemas para carregar as Essencias do BD!<br>".
                  mysqli_error($conn));}
         }else{
-          $sql = "SELECT * from essencia WHERE marca = '$marcaEssencia' or preco = '$preçoEssencia' or categoria = '$categoriaEssencia'  or sabor = '$saborEssencia' or quantidade ='$quantidadeEssencia' ";
+          $sql = "SELECT * from essencia WHERE marca = '$marcaEssencia' or preco = '$preçoEssencia' or categoria = '$categoriaEssencia'  or sabor = '$saborEssencia'";
           if(!($essencias = mysqli_query($conn,$sql))){
             die("Problemas para carregar as Essencias do BD!<br>".
                  mysqli_error($conn));
           }
         }
+    }elseif(isset($_GET["editar"]) == "editar") {
+
+      $marcaEssencia = ($_GET["marca"]);
+      
+      echo $marcaEssencia;
 
     }elseif (isset($_GET["excluir"]) == "excluir") {
       
@@ -163,6 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" href="#">Usuários</a>
+              
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="logout.php">Logout</a>
             </div>
@@ -179,50 +165,44 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                 <h3>Hookah Bar</h3>
             </div> -->
 
-           <ul class="sidebar navbar-nav">
+            <ul class="sidebar navbar-nav">
                 <li>
                     <a href="pedidos.php">Pedidos</a>
-                </li>
-                <li>
-                    <a href="vendas.php">Vendas</a>
                 </li>
                 <li class="active">
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Produtos</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
-                            <a href="carvao.php">Carvão</a>
+                            <a href="#">Carvão</a>
                         </li>
                         <li>
-                            <a href="aluminio.php">Alumínio</a>
+                            <a href="#">Alumínio</a>
                         </li>
                         <li>
                             <a href="Essencia.php">Essência</a>
                         </li>
                         <li>
-                            <a href="rosh.php">Rosh</a>
+                            <a href="#">Rosh</a>
                         </li>
                         <li>
-                            <a href="steam.php">Steam</a>
+                            <a href="#">Steam</a>
                         </li>
                         <li>
-                            <a href="mangueira.php">Mangueira</a>
+                            <a href="#">Mangueira</a>
                         </li>
                         <li>
-                            <a href="vaso.php">Vaso</a>
+                            <a href="#">Vaso</a>
                         </li>
                         <li>
-                            <a href="bebida.php">Bebidas</a>
+                            <a href="#">Bebidas</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="mesas.php">Mesas</a>
+                    <a href="#">Funcionário</a>
                 </li>
                 <li>
-                    <a href="funcionario.php">Funcionário</a>
-                </li>
-                <li>
-                    <a href="relatorio.php">Relatório</a>
+                    <a href="#">Relatório</a>
                 </li>
             </ul>
         </nav>
@@ -234,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             <div class="container-fluid">  
               <ol class="breadcrumb">
                   <li class="breadcrumb-item">
-                    <a href="pedidos.php">Dashboard Pedido</a>
+                    <a href="index.php">Dashboard Pedido</a>
                   </li>
                   <li class="breadcrumb-item active">Produtos - Essência</li>
               </ol>
@@ -271,8 +251,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 
                                 <label for="exampleFormControlInput1">Sabor</label>
                                 <input type="text" class="form-control" id="saborEssencia" name="saborEssencia" placeholder="Sabor">
-                                <label for="exampleFormControlInput1">Quantidade de Caixas</label>
-                                <input type="number" class="form-control" id="preçoEssencia" name="quantidadeEssencia" placeholder="Quantidade">
                                 <label for="exampleFormControlInput1">Escolha um arquivo de imagem</label>
                                 <input type="file" accept="image/png, image/jpeg" class="form-control" id="image" name="image">  
                                 <br>  
@@ -281,9 +259,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                               </div>
                             </div>               
                           </div>
-                  
+                      </form>  
                           <!-- DIV CONSULTA ESCONDIDO -->
                           <br>
+                          <form  method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">  
                             <div class="table-responsive" id="conteudo">
                               <table class="table table-bordered" id="tableResultado" width="100%" cellspacing="0">
                                 <thead>
@@ -293,15 +272,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                     <th>Sabor</th>
                                     <th>Marca</th>
                                     <th>Preço</th>
-                                    <th>Quantidade(Caixas)</th>
                                     <th>Ação</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <?php if(isset($essencias)){ ?>
                                     <?php if(mysqli_num_rows($essencias) > 0): ?>
-                                      <?php while($uni = mysqli_fetch_assoc($essencias)): ?> 
-                                        <?php echo '<tr><td>'. $uni["id_essencia"] . '</td><td>' . $uni["categoria"] . '</td><td>' . $uni["sabor"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a href=essenciaEdit.php?id='.$uni["id_essencia"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_essencia"].'>Excluir</button>' . '</td></tr>' ?>
+                                      <?php while($uni = mysqli_fetch_assoc($essencias)): ?>
+                                        <?php echo '<tr><td>'. $uni["id_essencia"] . '</td><td>' . $uni["categoria"] . '</td><td>' . $uni["sabor"] . '</td><td>' . '<input type="text" class="form-control" id="marcaEssencia" name="marcaEssencia" value='.$uni["marca"].'> '. '</td><td>' . $uni["preco"] . '</td><td>' . '<button class="btn btn-primary" type="submit" id="editar"  name="editar" value='.$uni["id_essencia"].'>Editar</button>' . ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_essencia"].'>Excluir</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>
@@ -311,6 +289,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 </tbody>
                               </table>
                             </div>
+                          </form>
                           <!-- FIM DIV ESCONDIDA -->
                           
 

@@ -21,20 +21,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
         $mysqlImg="";
         $imagem = $_FILES["image"];
 
-        $marcaEssencia = sanitize($_GET["marcaEssencia"]);
-        $marcaEssencia = mysqli_real_escape_string($conn,$marcaEssencia);
+        $marcaBebida = sanitize($_GET["marcaBebida"]);
+        $marcaBebida = mysqli_real_escape_string($conn,$marcaBebida);
 
-        $preçoEssencia = sanitize(($_GET["preçoEssencia"]));
-        $preçoEssencia = mysqli_real_escape_string($conn,$preçoEssencia);
+        $preçoBebida = sanitize(($_GET["preçoBebida"]));
+        $preçoBebida = mysqli_real_escape_string($conn,$preçoBebida);
         
-        $saborEssencia = sanitize(($_GET["saborEssencia"]));
-        $saborEssencia = mysqli_real_escape_string($conn,$saborEssencia);
-
-        $categoriaEssencia = sanitize(($_GET["categoriaEssencia"]));
-        $categoriaEssencia = mysqli_real_escape_string($conn,$categoriaEssencia);
-
-        $quantidadeEssencia = sanitize(($_GET["quantidadeEssencia"]));
-        $quantidadeEssencia = mysqli_real_escape_string($conn,$quantidadeEssencia);
+        $quantidadeBebida = sanitize(($_GET["quantidadeBebida"]));
+        $quantidadeBebida = mysqli_real_escape_string($conn,$quantidadeBebida);
 
         if($imagem != null){
           $nomeFinal = time().'.jpg';
@@ -46,17 +40,17 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
         }
 
 
-        if(empty(($_GET["marcaEssencia"])) and empty($preçoEssencia) and empty(($_GET["saborEssencia"])) and empty(($_GET["categoriaEssencia"]))){
+        if(empty($marcaBebida) and empty($preçoBebida) and empty($quantidadeBebida) )  {
           echo "Preencha todos os campos";
-        }elseif(empty(($_GET["marcaEssencia"]))  or empty($preçoEssencia) or empty(($_GET["saborEssencia"])) or empty(($_GET["categoriaEssencia"]))) {
+        }elseif(empty($marcaBebida)  or empty($preçoBebida) or empty($quantidadeBebida) ) {
           echo "Preencha um dos campos";
-        }elseif(!empty(($_GET["marcaEssencia"])) and !empty($preçoEssencia) and !empty(($_GET["saborEssencia"])) and !empty(($_GET["categoriaEssencia"]))) {
+        }elseif(!empty($marcaBebida) and !empty($preçoBebida) and !empty($quantidadeBebida)) {
 
 
-          $sql = "INSERT into essencia(`categoria`,`marca`,`preco`,`sabor`,`essenciaImg`) values ('$categoriaEssencia', '$marcaEssencia', '$preçoEssencia', '$saborEssencia', '$mysqlImg')";
+          $sql = "INSERT into bebida(`marca`,`preco`,`quantidade`) values ('$marcaBebida', '$preçoBebida', '$quantidadeBebida')";
           unlink($imagem);
           if(!mysqli_query($conn,$sql)){
-            die("Problemas para cadastrar Essencia!<br>".
+            die("Problemas para cadastrar Bebida!<br>".
                  mysqli_error($conn));
           }else{
             echo "Cadastrado com sucesso";
@@ -68,30 +62,24 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
        
       $bt = $_GET["pesquisar"];
 
-      $marcaEssencia = sanitize($_GET["marcaEssencia"]);
-      $marcaEssencia = mysqli_real_escape_string($conn,$marcaEssencia);
+        $marcaBebida = sanitize($_GET["marcaBebida"]);
+        $marcaBebida = mysqli_real_escape_string($conn,$marcaBebida);
 
-      $preçoEssencia = sanitize(($_GET["preçoEssencia"]));
-      $preçoEssencia = mysqli_real_escape_string($conn,$preçoEssencia);
-      
-      $saborEssencia = sanitize(($_GET["saborEssencia"]));
-      $saborEssencia = mysqli_real_escape_string($conn,$saborEssencia);
+        $preçoBebida = sanitize(($_GET["preçoBebida"]));
+        $preçoBebida = mysqli_real_escape_string($conn,$preçoBebida);
+        
+        $quantidadeBebida = sanitize(($_GET["quantidadeBebida"]));
+        $quantidadeBebida = mysqli_real_escape_string($conn,$quantidadeBebida);
 
-      $categoriaEssencia = sanitize(($_GET["categoriaEssencia"]));
-      $categoriaEssencia = mysqli_real_escape_string($conn,$categoriaEssencia);
-
-      $quantidadeEssencia = sanitize(($_GET["quantidadeEssencia"]));
-      $quantidadeEssencia = mysqli_real_escape_string($conn,$quantidadeEssencia);
-
-      if(empty($marcaEssencia) and empty($preçoEssencia) and empty($saborEssencia) and empty($categoriaEssencia) and empty($quantidadeEssencia)) {
-        $sql = "SELECT * from essencia";
-          if(!($essencias = mysqli_query($conn,$sql))){
-            die("Problemas para carregar as Essencias do BD!<br>".
+      if(empty($marcaBebida) and empty($preçoBebida) and empty($quantidadeBebida)) {
+        $sql = "SELECT * from bebida";
+          if(!($bebidas = mysqli_query($conn,$sql))){
+            die("Problemas para carregar as bebidas do BD!<br>".
                  mysqli_error($conn));}
         }else{
-          $sql = "SELECT * from essencia WHERE marca = '$marcaEssencia' or preco = '$preçoEssencia' or categoria = '$categoriaEssencia'  or sabor = '$saborEssencia' or quantidade ='$quantidadeEssencia' ";
-          if(!($essencias = mysqli_query($conn,$sql))){
-            die("Problemas para carregar as Essencias do BD!<br>".
+          $sql = "SELECT * from bebida WHERE marca = '$marcaBebida' or preco = '$preçoBebida' or quantidade ='$quantidadeBebida' ";
+          if(!($bebidas = mysqli_query($conn,$sql))){
+            die("Problemas para carregar as bebidas do BD!<br>".
                  mysqli_error($conn));
           }
         }
@@ -99,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
     }elseif (isset($_GET["excluir"]) == "excluir") {
       
       $num = $_GET["excluir"];
-        $sql = "DELETE from essencia WHERE id_essencia='$num'";
+        $sql = "DELETE from bebida WHERE id_prodDiversos='$num'";
           if(mysqli_query($conn,$sql)){
             echo "Excluido com sucesso!";  
           }else{
@@ -163,6 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" href="#">Usuários</a>
+              AW2 
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="logout.php">Logout</a>
             </div>
@@ -236,14 +225,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                   <li class="breadcrumb-item">
                     <a href="pedidos.php">Dashboard Pedido</a>
                   </li>
-                  <li class="breadcrumb-item active">Produtos - Essência</li>
+                  <li class="breadcrumb-item active">Produtos - Bebidas </li>
               </ol>
             </div>
           </div>   
           <div class="card">
                   <div class="card-header">
                     <!-- <i class="fas fa-table"></i> -->
-                    <h3>Essência</h3>
+                    <h3>Bebidas</h3>
                   </div>
                
                   <div class="card-body">
@@ -256,23 +245,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                               </div> -->
                             <div class="row">
                               <div class="col-md-6">                  
-                                <label for="exampleFormControlSelect1">Categoria</label>
-                                <select class="form-control" id="categoriaEssencia" name="categoriaEssencia">
-                                    <option></option>
-                                    <option>Premium</option>
-                                    <option>Normal</option>   
-                                </select>
+      
                                 <label for="exampleFormControlInput1">Marca</label>
-                                <input type="text" class="form-control" id="marcaEssencia" name="marcaEssencia" placeholder="Marca">
+                                <input type="text" class="form-control" id="marcaBebida" name="marcaBebida" placeholder="Marca">
                                 <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoEssencia" name="preçoEssencia" placeholder="Preço">
+                                <input type="number" class="form-control" id="preçoBebida" name="preçoBebida" placeholder="Preço">
                               </div>  
                               <div class="col-md-6 ">  
-                                
-                                <label for="exampleFormControlInput1">Sabor</label>
-                                <input type="text" class="form-control" id="saborEssencia" name="saborEssencia" placeholder="Sabor">
-                                <label for="exampleFormControlInput1">Quantidade de Caixas</label>
-                                <input type="number" class="form-control" id="preçoEssencia" name="quantidadeEssencia" placeholder="Quantidade">
+                                <label for="exampleFormControlInput1">Quantidade</label>
+                                <input type="number" class="form-control" id="quandidadeBebida" name="quantidadeBebida" placeholder="Quantidade">
                                 <label for="exampleFormControlInput1">Escolha um arquivo de imagem</label>
                                 <input type="file" accept="image/png, image/jpeg" class="form-control" id="image" name="image">  
                                 <br>  
@@ -288,20 +269,18 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                               <table class="table table-bordered" id="tableResultado" width="100%" cellspacing="0">
                                 <thead>
                                   <tr>
-                                    <th>ID Essência</th>
-                                    <th>Categoria</th>
-                                    <th>Sabor</th>
+                                    <th>ID Bebida</th>
                                     <th>Marca</th>
                                     <th>Preço</th>
-                                    <th>Quantidade(Caixas)</th>
+                                    <th>Quantidade</th>
                                     <th>Ação</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <?php if(isset($essencias)){ ?>
-                                    <?php if(mysqli_num_rows($essencias) > 0): ?>
-                                      <?php while($uni = mysqli_fetch_assoc($essencias)): ?> 
-                                        <?php echo '<tr><td>'. $uni["id_essencia"] . '</td><td>' . $uni["categoria"] . '</td><td>' . $uni["sabor"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a href=essenciaEdit.php?id='.$uni["id_essencia"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_essencia"].'>Excluir</button>' . '</td></tr>' ?>
+                                  <?php if(isset($bebidas)){ ?>
+                                    <?php if(mysqli_num_rows($bebidas) > 0): ?>
+                                      <?php while($uni = mysqli_fetch_assoc($bebidas)): ?> 
+                                        <?php echo '<tr><td>'. $uni["id_prodDiversos"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a href=bebidaEdit.php?id='.$uni["id_prodDiversos"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_prodDiversos"].'>Excluir</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>

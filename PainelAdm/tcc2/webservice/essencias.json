@@ -1,0 +1,146 @@
+Array
+(
+    [0] => Array
+        (
+            [id_essencia] => 5
+            [sabor] => Geleia
+            [marca] => Marca3
+            [preco] => 42
+            [categoria] => Premium
+            [essenciaImg] => 
+            [quantidade] => 10
+        )
+
+    [1] => Array
+        (
+            [id_essencia] => 7
+            [sabor] => novo sabor
+            [marca] => marca100
+            [preco] => 800
+            [categoria] => normal
+            [essenciaImg] => 
+            [quantidade] => 20
+        )
+
+    [2] => Array
+        (
+            [id_essencia] => 9
+            [sabor] => saborzin
+            [marca] => marca2
+            [preco] => 20
+            [categoria] => Premium
+            [essenciaImg] => 
+            [quantidade] => 
+        )
+
+    [3] => Array
+        (
+            [id_essencia] => 11
+            [sabor] => morango
+            [marca] => new
+            [preco] => 80
+            [categoria] => Premium
+            [essenciaImg] => 
+            [quantidade] => 10
+        )
+
+    [4] => Array
+        (
+            [id_essencia] => 12
+            [sabor] => morango
+            [marca] => marca10
+            [preco] => 800
+            [categoria] => Normal
+            [essenciaImg] => 
+            [quantidade] => 
+        )
+
+    [5] => Array
+        (
+            [id_essencia] => 16
+            [sabor] => morango
+            [marca] => marca1
+            [preco] => 10
+            [categoria] => Premium
+            [essenciaImg] => 
+            [quantidade] => 
+        )
+
+    [6] => Array
+        (
+            [id_essencia] => 17
+            [sabor] => morango
+            [marca] => marca1
+            [preco] => 10
+            [categoria] => Premium
+            [essenciaImg] => 
+            [quantidade] => 
+        )
+
+    [7] => Array
+        (
+            [id_essencia] => 18
+            [sabor] => Morango
+            [marca] => marca2
+            [preco] => 10
+            [categoria] => Normal
+            [essenciaImg] => 
+            [quantidade] => 
+        )
+
+    [8] => Array
+        (
+            [id_essencia] => 19
+            [sabor] => Morango
+            [marca] => marca2
+            [preco] => 10
+            [categoria] => Normal
+            [essenciaImg] => 
+            [quantidade] => 
+        )
+
+    [9] => Array
+        (
+            [id_essencia] => 26
+            [sabor] => whey
+            [marca] => marca20
+            [preco] => 300
+            [categoria] => Normal
+            [essenciaImg] => 
+            [quantidade] => 
+        )
+
+    [10] => Array
+        (
+            [id_essencia] => 27
+            [sabor] => Geleia
+            [marca] => marca1
+            [preco] => 60
+            [categoria] => Premium
+            [essenciaImg] => 
+            [quantidade] => 
+        )
+
+    [11] => Array
+        (
+            [id_essencia] => 28
+            [sabor] => sabor inconfundivel
+            [marca] => marca1
+            [preco] => 50
+            [categoria] => Normal
+            [essenciaImg] => 
+            [quantidade] => 
+        )
+
+    [12] => Array
+        (
+            [id_essencia] => 29
+            [sabor] => 
+            [marca] => 
+            [preco] => 
+            [categoria] => 
+            [essenciaImg] => 
+            [quantidade] => 10
+        )
+
+)

@@ -18,45 +18,36 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 
       if(isset($_GET["cadastrar"]) == "cadastrar"){
 
-        $mysqlImg="";
-        $imagem = $_FILES["image"];
+        $marcaRosh = sanitize($_GET["marcaRosh"]);
+        $marcaRosh = mysqli_real_escape_string($conn,$marcaRosh);
 
-        $marcaEssencia = sanitize($_GET["marcaEssencia"]);
-        $marcaEssencia = mysqli_real_escape_string($conn,$marcaEssencia);
+        $corRosh = sanitize($_GET["corRosh"]);
+        $corRosh = mysqli_real_escape_string($conn,$corRosh);
 
-        $preçoEssencia = sanitize(($_GET["preçoEssencia"]));
-        $preçoEssencia = mysqli_real_escape_string($conn,$preçoEssencia);
+        $materialRosh = sanitize($_GET["materialRosh"]);
+        $materialRosh = mysqli_real_escape_string($conn,$materialRosh);
+
+        $tamanhoRosh = sanitize($_GET["tamanhoRosh"]);
+        $tamanhoRosh = mysqli_real_escape_string($conn,$tamanhoRosh);
+
+        $preçoRosh = sanitize(($_GET["preçoRosh"]));
+        $preçoRosh = mysqli_real_escape_string($conn,$preçoRosh);
         
-        $saborEssencia = sanitize(($_GET["saborEssencia"]));
-        $saborEssencia = mysqli_real_escape_string($conn,$saborEssencia);
-
-        $categoriaEssencia = sanitize(($_GET["categoriaEssencia"]));
-        $categoriaEssencia = mysqli_real_escape_string($conn,$categoriaEssencia);
-
-        $quantidadeEssencia = sanitize(($_GET["quantidadeEssencia"]));
-        $quantidadeEssencia = mysqli_real_escape_string($conn,$quantidadeEssencia);
-
-        if($imagem != null){
-          $nomeFinal = time().'.jpg';
-          if(move_uploaded_file($imagem['tmp_name'], $nomeFinal)) { //valida se o arquivo é um arquivo de upload valido
-            $tamanhoImg = filesize($nomeFinal); //pega o tamnho do arquivo
-            $mysqlImg = addslashes(fread(fopen($nomeFinal, "r"), $tamanhoImg)); // abre o arquivo, le o arquivo e prepara-o
-            echo "imagem preparada com sucesso";     
-          }  
-        }
+        $quantidadeRosh = sanitize(($_GET["quantidadeRosh"]));
+        $quantidadeRosh = mysqli_real_escape_string($conn,$quantidadeRosh);
 
 
-        if(empty(($_GET["marcaEssencia"])) and empty($preçoEssencia) and empty(($_GET["saborEssencia"])) and empty(($_GET["categoriaEssencia"]))){
+        if(empty($marcaRosh) and empty($preçoRosh) and empty($quantidadeRosh) and empty($corRosh) and empty($tamanhoRosh) and empty($materialRosh) )  {
           echo "Preencha todos os campos";
-        }elseif(empty(($_GET["marcaEssencia"]))  or empty($preçoEssencia) or empty(($_GET["saborEssencia"])) or empty(($_GET["categoriaEssencia"]))) {
+        }elseif(empty($marcaRosh)  or empty($preçoRosh) or empty($quantidadeRosh) or empty($corRosh) or empty($tamanhoRosh) or empty($materialRosh) ) {
           echo "Preencha um dos campos";
-        }elseif(!empty(($_GET["marcaEssencia"])) and !empty($preçoEssencia) and !empty(($_GET["saborEssencia"])) and !empty(($_GET["categoriaEssencia"]))) {
+        }elseif(!empty($marcaRosh) and !empty($preçoRosh) and !empty($quantidadeRosh) and !empty($corRosh) and !empty($tamanhoRosh) and !empty($materialRosh) ) {
 
 
-          $sql = "INSERT into essencia(`categoria`,`marca`,`preco`,`sabor`,`essenciaImg`) values ('$categoriaEssencia', '$marcaEssencia', '$preçoEssencia', '$saborEssencia', '$mysqlImg')";
-          unlink($imagem);
+          $sql = "INSERT into rosh(`marca`, `cor`, `material`, `tamanho`, `preco`, `quantidade`) values ('$marcaRosh', '$corRosh', '$materialRosh', '$tamanhoRosh', '$preçoRosh', '$quantidadeRosh');";
+
           if(!mysqli_query($conn,$sql)){
-            die("Problemas para cadastrar Essencia!<br>".
+            die("Problemas para cadastrar Rosh!<br>".
                  mysqli_error($conn));
           }else{
             echo "Cadastrado com sucesso";
@@ -68,30 +59,33 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
        
       $bt = $_GET["pesquisar"];
 
-      $marcaEssencia = sanitize($_GET["marcaEssencia"]);
-      $marcaEssencia = mysqli_real_escape_string($conn,$marcaEssencia);
+        $marcaRosh = sanitize($_GET["marcaRosh"]);
+        $marcaRosh = mysqli_real_escape_string($conn,$marcaRosh);
 
-      $preçoEssencia = sanitize(($_GET["preçoEssencia"]));
-      $preçoEssencia = mysqli_real_escape_string($conn,$preçoEssencia);
-      
-      $saborEssencia = sanitize(($_GET["saborEssencia"]));
-      $saborEssencia = mysqli_real_escape_string($conn,$saborEssencia);
+        $corRosh = sanitize($_GET["corRosh"]);
+        $corRosh = mysqli_real_escape_string($conn,$corRosh);
 
-      $categoriaEssencia = sanitize(($_GET["categoriaEssencia"]));
-      $categoriaEssencia = mysqli_real_escape_string($conn,$categoriaEssencia);
+        $materialRosh = sanitize($_GET["materialRosh"]);
+        $materialRosh = mysqli_real_escape_string($conn,$materialRosh);
 
-      $quantidadeEssencia = sanitize(($_GET["quantidadeEssencia"]));
-      $quantidadeEssencia = mysqli_real_escape_string($conn,$quantidadeEssencia);
+        $tamanhoRosh = sanitize($_GET["tamanhoRosh"]);
+        $tamanhoRosh = mysqli_real_escape_string($conn,$tamanhoRosh);
 
-      if(empty($marcaEssencia) and empty($preçoEssencia) and empty($saborEssencia) and empty($categoriaEssencia) and empty($quantidadeEssencia)) {
-        $sql = "SELECT * from essencia";
-          if(!($essencias = mysqli_query($conn,$sql))){
-            die("Problemas para carregar as Essencias do BD!<br>".
+        $preçoRosh = sanitize(($_GET["preçoRosh"]));
+        $preçoRosh = mysqli_real_escape_string($conn,$preçoRosh);
+        
+        $quantidadeRosh = sanitize(($_GET["quantidadeRosh"]));
+        $quantidadeRosh = mysqli_real_escape_string($conn,$quantidadeRosh);
+
+      if(empty($marcaRosh) and empty($preçoRosh) and empty($quantidadeRosh) and empty($corRosh) and empty($tamanhoRosh) and empty($materialRosh) ) {
+        $sql = "SELECT * from rosh";
+          if(!($roshs = mysqli_query($conn,$sql))){
+            die("Problemas para carregar os Roshs do BD!<br>".
                  mysqli_error($conn));}
         }else{
-          $sql = "SELECT * from essencia WHERE marca = '$marcaEssencia' or preco = '$preçoEssencia' or categoria = '$categoriaEssencia'  or sabor = '$saborEssencia' or quantidade ='$quantidadeEssencia' ";
-          if(!($essencias = mysqli_query($conn,$sql))){
-            die("Problemas para carregar as Essencias do BD!<br>".
+          $sql = "SELECT * from rosh WHERE marca = '$marcaRosh' or cor='$corRosh'  or material='$materialRosh' or tamanho='$tamanhoRosh' or preco = '$preçoRosh' or quantidade ='$quantidadeRosh' ";
+          if(!($roshs = mysqli_query($conn,$sql))){
+            die("Problemas para carregar os Roshs do BD!<br>".
                  mysqli_error($conn));
           }
         }
@@ -99,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
     }elseif (isset($_GET["excluir"]) == "excluir") {
       
       $num = $_GET["excluir"];
-        $sql = "DELETE from essencia WHERE id_essencia='$num'";
+        $sql = "DELETE from rosh WHERE id_rosh='$num'";
           if(mysqli_query($conn,$sql)){
             echo "Excluido com sucesso!";  
           }else{
@@ -236,14 +230,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                   <li class="breadcrumb-item">
                     <a href="pedidos.php">Dashboard Pedido</a>
                   </li>
-                  <li class="breadcrumb-item active">Produtos - Essência</li>
+                  <li class="breadcrumb-item active">Produtos - Rosh</li>
               </ol>
             </div>
           </div>   
           <div class="card">
                   <div class="card-header">
                     <!-- <i class="fas fa-table"></i> -->
-                    <h3>Essência</h3>
+                    <h3>Rosh</h3>
                   </div>
                
                   <div class="card-body">
@@ -255,26 +249,21 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 <h3>Pesquisar</h3>
                               </div> -->
                             <div class="row">
-                              <div class="col-md-6">                  
-                                <label for="exampleFormControlSelect1">Categoria</label>
-                                <select class="form-control" id="categoriaEssencia" name="categoriaEssencia">
-                                    <option></option>
-                                    <option>Premium</option>
-                                    <option>Normal</option>   
-                                </select>
+                              <div class="col-md-6">             
+      
                                 <label for="exampleFormControlInput1">Marca</label>
-                                <input type="text" class="form-control" id="marcaEssencia" name="marcaEssencia" placeholder="Marca">
-                                <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoEssencia" name="preçoEssencia" placeholder="Preço">
+                                <input type="text" class="form-control" id="marcaRosh" name="marcaRosh" placeholder="Marca">
+                                <label for="exampleFormControlInput1">Cor</label>
+                                <input type="text" class="form-control" id="corRosh" name="corRosh" placeholder="Cor">
+                                <label for="exampleFormControlInput1">Material</label>
+                                <input type="text" class="form-control" id="materialRosh" name="materialRosh" placeholder="Material">
                               </div>  
-                              <div class="col-md-6 ">  
-                                
-                                <label for="exampleFormControlInput1">Sabor</label>
-                                <input type="text" class="form-control" id="saborEssencia" name="saborEssencia" placeholder="Sabor">
-                                <label for="exampleFormControlInput1">Quantidade de Caixas</label>
-                                <input type="number" class="form-control" id="preçoEssencia" name="quantidadeEssencia" placeholder="Quantidade">
-                                <label for="exampleFormControlInput1">Escolha um arquivo de imagem</label>
-                                <input type="file" accept="image/png, image/jpeg" class="form-control" id="image" name="image">  
+                              <div class="col-md-6 ">
+                                <label for="exampleFormControlInput1">Tamanho</label>
+                                <input type="number" class="form-control" id="tamanhoRosh" name="tamanhoRosh" placeholder="Tamanho">                              <label for="exampleFormControlInput1">Preço</label>
+                                <input type="number" class="form-control" id="preçoRosh" name="preçoRosh" placeholder="Preço">
+                                <label for="exampleFormControlInput1">Quantidade</label>
+                                <input type="number" class="form-control" id="quandidadeRosh" name="quantidadeRosh" placeholder="Quantidade">
                                 <br>  
                                 <button class="btn btn-primary" type="submit" id="cadastrar" class="floated" name="cadastrar" value="cadastrar">Cadastrar</button>
                                 <button class="btn btn-primary" type="submit" id="pesquisar" class="floated" name="pesquisar" value="pesquisar">Pesquisar</button>  
@@ -288,20 +277,21 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                               <table class="table table-bordered" id="tableResultado" width="100%" cellspacing="0">
                                 <thead>
                                   <tr>
-                                    <th>ID Essência</th>
-                                    <th>Categoria</th>
-                                    <th>Sabor</th>
+                                    <th>ID Rosh</th>
                                     <th>Marca</th>
+                                    <th>Cor</th>
+                                    <th>Material</th>
+                                    <th>Tamanho</th>
                                     <th>Preço</th>
-                                    <th>Quantidade(Caixas)</th>
+                                    <th>Quantidade</th>
                                     <th>Ação</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <?php if(isset($essencias)){ ?>
-                                    <?php if(mysqli_num_rows($essencias) > 0): ?>
-                                      <?php while($uni = mysqli_fetch_assoc($essencias)): ?> 
-                                        <?php echo '<tr><td>'. $uni["id_essencia"] . '</td><td>' . $uni["categoria"] . '</td><td>' . $uni["sabor"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a href=essenciaEdit.php?id='.$uni["id_essencia"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_essencia"].'>Excluir</button>' . '</td></tr>' ?>
+                                  <?php if(isset($roshs)){ ?>
+                                    <?php if(mysqli_num_rows($roshs) > 0): ?>
+                                      <?php while($uni = mysqli_fetch_assoc($roshs)): ?> 
+                                        <?php echo '<tr><td>'. $uni["id_rosh"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["cor"] . '</td><td>' . $uni["material"] . '</td><td>' . $uni["tamanho"] . '</td><td>'. $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a href=roshEdit.php?id='.$uni["id_rosh"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_rosh"].'>Excluir</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>

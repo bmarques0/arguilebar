@@ -1,5 +1,4 @@
 
-
 #sidebar.active {
     margin-left: -250px;
 }
@@ -80,7 +79,6 @@ a, a:hover, a:focus {
 #sidebar ul li a {
     padding: 10px;
     font-size: 1.1em;
-    display: block;
 }
 #sidebar ul li a:hover {
     color: #7386D5;
@@ -107,7 +105,6 @@ ul ul a {
 #conteudo{ /* div escondida */
 	color: #fff;
     background: #6d7fcc;
-    visibility: hidden;
     margin-top: 10px;
 }
 .card-header{
@@ -125,3 +122,4 @@ th, td {
 	position: relative;
 	float: right;
 }
+

@@ -13,16 +13,10 @@ if (!$conn) {
        mysqli_connect_error());
 }
 
-$sql = "select m.nomeMesa, e.sabor, f.nome_func, s.descricao, b.marca from mesa m, essencia e, funcionario f, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
+$sql = "select m.nomeMesa, e.sabor, f.nome_func, s.descricao, b.nome from mesa m, essencia e, funcionario f, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
 and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and f.id_funcionario=p.funcionario_id_funcionario and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida";
 
 if(!($pedidos = mysqli_query($conn,$sql))){
-  die("Problemas para carregar as Essencias do BD!<br>".
-    mysqli_error($conn));
-  }
-
-$sql = "select * from funcionario";
-if(!($funcionarios = mysqli_query($conn,$sql))){
   die("Problemas para carregar as Essencias do BD!<br>".
     mysqli_error($conn));
   }
@@ -101,35 +95,32 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
                 <li>
                     <a href="pedidos.php">Pedidos</a>
                 </li>
-                <li>
-                    <a href="vendas.php">Vendas</a>
-                </li>
                 <li class="active">
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Produtos</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
-                            <a href="carvao.php">Carvão</a>
+                            <a href="#">Carvão</a>
                         </li>
                         <li>
-                            <a href="aluminio.php">Alumínio</a>
+                            <a href="#">Alumínio</a>
                         </li>
                         <li>
-                            <a href="Essencia.php">Essência</a>
+                            <a href="essencia.php">Essência</a>
                         </li>
                         <li>
-                            <a href="rosh.php">Rosh</a>
+                            <a href="#">Rosh</a>
                         </li>
                         <li>
-                            <a href="steam.php">Steam</a>
+                            <a href="#">Steam</a>
                         </li>
                         <li>
-                            <a href="mangueira.php">Mangueira</a>
+                            <a href="#">Mangueira</a>
                         </li>
                         <li>
-                            <a href="vaso.php">Vaso</a>
+                            <a href="#">Vaso</a>
                         </li>
                         <li>
-                            <a href="bebida.php">Bebidas</a>
+                            <a href="#">Bebidas</a>
                         </li>
                     </ul>
                 </li>
@@ -137,10 +128,13 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
                     <a href="mesas.php">Mesas</a>
                 </li>
                 <li>
-                    <a href="funcionario.php">Funcionário</a>
+                    <a href="#">Funcionário</a>
                 </li>
                 <li>
-                    <a href="relatorio.php">Relatório</a>
+                    <a href="#">Relatório</a>
+                </li>
+                <li>
+                    <a href="#">Logout</a>
                 </li>
             </ul>
         </nav>
@@ -187,7 +181,7 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
                                   <?php if(isset($pedidos)){ ?>
                                     <?php if(mysqli_num_rows($pedidos) > 0): ?>
                                       <?php while($uni = mysqli_fetch_assoc($pedidos)): ?> 
-                                        <?php echo '<tr><td>'. $uni["nomeMesa"] . '</td><td>' . $uni["sabor"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["nome_func"] . '</td><td>' . $uni["descricao"] . '</td></tr>' ?>
+                                        <?php echo '<tr><td>'. $uni["nomeMesa"] . '</td><td>' . $uni["sabor"] . '</td><td>' . $uni["nome"] . '</td><td>' . $uni["nome_func"] . '</td><td>' . $uni["descricao"] . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>

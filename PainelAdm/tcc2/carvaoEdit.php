@@ -1,7 +1,7 @@
 <?php
 require 'db_credentials.php';
-require "authenticate.php";
-
+require 'authenticate.php';
+require 'lib/sanitize.php';
 
 if(!$login){
   header("Location: " . dirname($_SERVER['SCRIPT_NAME']) . "/login.php");}
@@ -13,21 +13,51 @@ if (!$conn) {
        mysqli_connect_error());
 }
 
-$sql = "select m.nomeMesa, e.sabor, f.nome_func, s.descricao, b.marca from mesa m, essencia e, funcionario f, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
-and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and f.id_funcionario=p.funcionario_id_funcionario and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida";
+if ($_SERVER["REQUEST_METHOD"] == "GET"){
+    
+    if(isset($_GET["id"])){  
+      
+      $id=$_GET["id"];
 
-if(!($pedidos = mysqli_query($conn,$sql))){
-  die("Problemas para carregar as Essencias do BD!<br>".
-    mysqli_error($conn));
-  }
+      $sql = "SELECT * from carvao where id_carvao= '$id'";
 
-$sql = "select * from funcionario";
-if(!($funcionarios = mysqli_query($conn,$sql))){
-  die("Problemas para carregar as Essencias do BD!<br>".
-    mysqli_error($conn));
-  }
+      if(!($carvao = mysqli_query($conn,$sql))){
+          die("Problemas para carregar os carvões do BD!<br>".
+            mysqli_error($conn));
+      }else{
+        $carvao=mysqli_query($conn,$sql);
+
+        $carvao=mysqli_fetch_assoc($carvao);
+      }
+      if(isset($_GET["confirmar"])){
+        
+        /*if(!is_null(($_GET["marcaEssencia"]))  or !is_null(($_GET["preçoEssencia"])) or !is_null(($_GET["saborEssencia"])) or !is_null(($_GET["categoriaEssencia"]))) {
+          echo "preencha todos os campos";
+        }else{*/
+          $id=$_GET["id"];
+ 
+
+        $marcaCarvao = sanitize($_GET["marcaCarvao"]);
+        $marcaCarvao = mysqli_real_escape_string($conn,$marcaCarvao);
+   
+        $preçoCarvao = sanitize(($_GET["preçoCarvao"]));
+        $preçoCarvao = mysqli_real_escape_string($conn,$preçoCarvao);
+
+        $quantidadeCarvao = sanitize(($_GET["quantidadeCarvao"]));
+        $quantidadeCarvao = mysqli_real_escape_string($conn,$quantidadeCarvao);
 
 
+          $sql = "UPDATE carvao SET carvao.marca='$marcaCarvao', carvao.preco='$preçoCarvao', carvao.quantidade='$quantidadeCarvao' where id_carvao=$id";
+          if(!mysqli_query($conn,$sql)){
+            die("Problemas para atualizar Carvao!<br>".
+                 mysqli_error($conn));
+          }else{
+           echo "Atualizado com sucesso";
+          }
+
+        }    
+      }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +75,7 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
     <!-- Customização CSS -->
     <link rel="stylesheet" href="styles.css">
     <!-- javascripts -->
-    <script src="scripts.js"></script>
+    
 
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
@@ -59,7 +89,7 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
   <div class="container-wrapper">    
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-        <a class="navbar-brand mr-1" href="index.php">Hookah Bar</a>
+        <a class="navbar-brand mr-1" href="pedidos.php">Hookah Bar</a>
         <!-- Navbar Search -->
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
           <div class="input-group">
@@ -100,9 +130,6 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
             <ul class="sidebar navbar-nav">
                 <li>
                     <a href="pedidos.php">Pedidos</a>
-                </li>
-                <li>
-                    <a href="vendas.php">Vendas</a>
                 </li>
                 <li class="active">
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Produtos</a>
@@ -154,18 +181,18 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
                   <li class="breadcrumb-item">
                     <a href="pedidos.php">Dashboard Pedido</a>
                   </li>
-                  <li class="breadcrumb-item active">Pedidos</li>
+                  <li class="breadcrumb-item active">Produtos - Carvão</li>
               </ol>
             </div>
           </div>   
           <div class="card">
                   <div class="card-header">
                     <!-- <i class="fas fa-table"></i> -->
-                    <h3>Pedidos</h3>
+                    <h3>Carvão</h3>
                   </div>
                
                   <div class="card-body">
-                      <form  method="GET" action="#" > 
+                      <form  method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>"> 
                         <div class="row">
                           <div  class="container-fluid">
                             <!-- <div class="card mb-3"> -->                    
@@ -173,40 +200,31 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
                                 <h3>Pesquisar</h3>
                               </div> -->
                             <div class="row">
-                              <table class="table table-bordered" id="dataTable"  cellspacing="0">
-                                <thead>
-                                  <tr>
-                                    <th>Mesa</th>
-                                    <th>Arguile</th>
-                                    <th>Bebida</th>
-                                    <th>Funcionario</th>
-                                    <th>Status</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <?php if(isset($pedidos)){ ?>
-                                    <?php if(mysqli_num_rows($pedidos) > 0): ?>
-                                      <?php while($uni = mysqli_fetch_assoc($pedidos)): ?> 
-                                        <?php echo '<tr><td>'. $uni["nomeMesa"] . '</td><td>' . $uni["sabor"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["nome_func"] . '</td><td>' . $uni["descricao"] . '</td></tr>' ?>
+                              <div class="col-md-6">                  
+                                <label for="exampleFormControlInput1">Marca</label>
+                                <input type="text" class="form-control" id="marcaCarvao" name="marcaCarvao" value="<?php echo $carvao["marca"] ?>">
+                                <label for="exampleFormControlInput1">Preço</label>
+                                <input type="number" class="form-control" id="preçoCarvao" name="preçoCarvao" value="<?php echo $carvao["preco"] ?>">
+                              </div>  
+                              <div class="col-md-6 ">                                
+                                <label for="exampleFormControlInput1">Quantidade de Caixas</label>
+                                <input type="number" class="form-control" id="quantidadeCarvao" name="quantidadeCarvao" value="<?php echo $carvao["quantidade"] ?>">  
+                                <input type="hidden" class="form-control" id="id" name="id" value="<?php echo $carvao["id_carvao"] ?>">
+                                <br>  
+                                <button class="btn btn-primary" type="submit" id="confirmar" class="floated" name="confirmar">Alterar</button>
 
-                                      <?php endwhile; ?>
-                                    <?php else: ?>
-                                      Nenhuma busca realizada!
-                                    <?php endif; ?>
-                                  <?php } ?> 
-                                </tbody>
-                              </table>
-                                        
-                            <!-- FIM DIV ESCONDIDA -->
-                           
-                            </div> <!-- div row form -->
-                          </div> <!-- container fluid-->
-                        </div>  
+                              </div>
+                            </div>               
+                          </div>
+    
+
+                        </div> <!-- div row form -->
                       </form>
                     </div> <!-- Card body -->
                   </div>  <!-- card -->
             </div>  <!--content-wrapper -->
-          </div>   <!-- col-md-9 -->
+          </div>   <!-- col-->
+
         </div> <!--row-->  
       </div> <!-- ID WRAPPER-->
     </div>    <!-- container-wrapper -->
@@ -217,7 +235,7 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-
+    <script src="js/scripts.js"></script>
 </body>
 
 </html>

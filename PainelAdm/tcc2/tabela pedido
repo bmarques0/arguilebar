@@ -1,0 +1,9 @@
+Tabela Pedido = {
+	Bebida - App
+	Essência - App
+	Status - App/Painel
+	Mesa - App
+	Funcionário - Painel Adm
+}
+insert into funcionario(`nome_func`, `cpf_func`, `data_adm`, `cargo`, `salario`, `endereco`, `telefoneCelular`, `telefoneResidencial`, `sobrenome`) values ('Bruno', '08391201929', '10/05/2017', 'Garçom', '1400', 'Rua Leopoldia 573' , '41995214547', '4137254124', 'Felipe Pinto');
+
