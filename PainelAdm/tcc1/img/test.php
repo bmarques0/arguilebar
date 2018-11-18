@@ -1,6 +1,0 @@
-<? 
-
-
-int phpinfo ([ int $what ] )
-
- ?>
