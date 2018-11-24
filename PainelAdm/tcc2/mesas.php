@@ -24,10 +24,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
         $capacidadeMesa = sanitize(($_GET["capacidadeMesa"]));
         $capacidadeMesa = mysqli_real_escape_string($conn,$capacidadeMesa);
 
+        $nomeMesa = "Mesa ".$numeroMesa;
+
         if(empty($numeroMesa) and empty($capacidadeMesa)) {
-          echo "Preencha todos os campos";
+          echo '<script>alert("Favor preencher todos os campos!"); </script>';
         }elseif(empty($numeroMesa) or empty($capacidadeMesa)) {
-          echo "Preencha um dos campos";
+          echo '<script>alert("Favor preencher todos os campos!"); </script>';
         }elseif(!empty($numeroMesa) and !empty($capacidadeMesa)) {
 
           $sqlConsulta = "SELECT * from mesa where id_mesa='$numeroMesa'";
@@ -36,15 +38,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 
           if(mysqli_num_rows($result) == 0){
 
-              $sql = "INSERT into mesa(`id_mesa`,`capacidade`) values ('$numeroMesa', '$capacidadeMesa')";
+              $sql = "INSERT into mesa(`id_mesa`,`capacidade`, `nomeMesa`) values ('$numeroMesa', '$capacidadeMesa', '$nomeMesa')";
               if(!mysqli_query($conn,$sql)){
               die("Problemas para cadastrar Essencia!<br>".
                    mysqli_error($conn));
               }else{
-                echo "Cadastrado com sucesso";
+                echo '<script>alert("Mesa cadastrada com sucesso!"); </script>';
               }
           }else{
-            echo "Mesa ja cadastrada";
+            echo '<script>alert("Mesa já cadastrada!"); </script>';
 
           }
                              
@@ -72,35 +74,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                  mysqli_error($conn));
           }
         }
-    }elseif(isset($_GET["editar"]) == "editar") {
-
-      $marcaEssencia = "";
-      $preçoEssencia = "";
-      $saborEssencia = "";
-      $categoriaEssencia = "";
-
-      $id = $_GET["editar"];
-      $sql = "SELECT marca, preco, categoria, sabor from essencia where id_essencia='$id'";
-      if(!($essencias = mysqli_query($conn,$sql))){
-            die("Problemas para carregar as Essencias do BD!<br>".
-                 mysqli_error($conn));}
-      while($uni = mysqli_fetch_assoc($essencias)){
-        $marcaEssencia = $uni["marca"];
-        $preçoEssencia = $uni["preco"];
-        $saborEssencia = $uni["categoria"];
-        $categoriaEssencia = $uni["sabor"];  
-      }    
-      header("Location: essenciaEdit.php?id=" . $id . "&marca=" . $marcaEssencia . "&preco=" . $preçoEssencia . "&sabor=" . $saborEssencia . "&categoria=" . $categoriaEssencia);
-
     }elseif (isset($_GET["excluir"]) == "excluir") {
       
       $numeroMesa = ($_GET["excluir"]);
       
         $sql = "DELETE from mesa WHERE id_mesa='$numeroMesa'";
           if(mysqli_query($conn,$sql)){
-            echo "Excluido com sucesso!";  
+            echo '<script>alert("Mesa excluída com sucesso! "); </script>';  
           }else{
-            echo "ERRO ao excluir registro";  
+            echo '<script>alert("Erro ao excluir mesa!"); </script>'; 
           }
 
     }

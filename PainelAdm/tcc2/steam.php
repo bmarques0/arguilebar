@@ -17,34 +17,40 @@ if(isset($_GET["msg"])){
     echo "<script>alert('".$_GET['msg']."');</script>";
 }
 
+
 if ($_SERVER["REQUEST_METHOD"] == "GET"){  
 
       if(isset($_GET["cadastrar"]) == "cadastrar"){
 
+        $marcaSteam = sanitize($_GET["marcaSteam"]);
+        $marcaSteam = mysqli_real_escape_string($conn,$marcaSteam);
 
-        $marcaCarvao = sanitize($_GET["marcaCarvao"]);
-        $marcaCarvao = mysqli_real_escape_string($conn,$marcaCarvao);
+        $alturaSteam = sanitize($_GET["alturaSteam"]);
+        $alturaSteam = mysqli_real_escape_string($conn,$alturaSteam);
 
-        $preçoCarvao = sanitize(($_GET["preçoCarvao"]));
-        $preçoCarvao = mysqli_real_escape_string($conn,$preçoCarvao);
+        $quantidadeSteam = sanitize($_GET["quantidadeSteam"]);
+        $quantidadeSteam = mysqli_real_escape_string($conn,$quantidadeSteam);
 
-        $quantidadeCarvao = sanitize(($_GET["quantidadeCarvao"]));
-        $quantidadeCarvao = mysqli_real_escape_string($conn,$quantidadeCarvao);
+        $materialSteam = sanitize($_GET["materialSteam"]);
+        $materialSteam = mysqli_real_escape_string($conn,$materialSteam);
+        
+        $precoSteam = sanitize(($_GET["precoSteam"]));
+        $precoSteam = mysqli_real_escape_string($conn,$precoSteam);
 
 
-        if(empty($marcaCarvao) and empty($preçoCarvao) and empty($quantidadeCarvao)){
+        if(empty($marcaSteam) and empty($precoSteam) and empty($alturaSteam) and empty($materialSteam) and empty($quantidadeSteam) )  {
           echo '<script>alert("Favor preencher todos os campos!"); </script>';  
-        }elseif(empty($marcaCarvao)  or empty($preçoCarvao) or empty($quantidadeCarvao)) {
-          echo '<script>alert("Favor preencher todos os campos!"); </script>';  
-        }elseif(!empty($marcaCarvao) and !empty($preçoCarvao) and !empty($quantidadeCarvao)) {
+        }elseif(empty($marcaSteam)  or empty($precoSteam) or empty($alturaSteam) or empty($materialSteam) or empty($quantidadeSteam) ) {
+          echo '<script>alert("Favor preencher todos os campos!"); </script>';
+        }elseif(!empty($marcaSteam) and !empty($precoSteam) and !empty($alturaSteam) and !empty($materialSteam) and !empty($quantidadeSteam) ) {
 
+          $sql = "INSERT into steam(`marca`, `altura`, `quantidade`, `material`, `preco`) values ('$marcaSteam', '$alturaSteam', '$quantidadeSteam', '$materialSteam', '$precoSteam');";
 
-          $sql = "INSERT into carvao(`marca`,`preco`,`quantidade`) values ('$marcaCarvao', '$preçoCarvao', '$quantidadeCarvao')";
           if(!mysqli_query($conn,$sql)){
-            die("Problemas para cadastrar Carvao!<br>".
+            die("Problemas para cadastrar Steam!<br>".
                  mysqli_error($conn));
           }else{
-            echo '<script>alert("Carvão cadastrado com sucesso!"); </script>';  
+            echo '<script>alert("Steam cadastrada com sucesso!"); </script>';
           }  
         }
       
@@ -53,25 +59,30 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
        
       $bt = $_GET["pesquisar"];
 
+        $marcaSteam = sanitize($_GET["marcaSteam"]);
+        $marcaSteam = mysqli_real_escape_string($conn,$marcaSteam);
 
-      $marcaCarvao = sanitize($_GET["marcaCarvao"]);
-      $marcaCarvao = mysqli_real_escape_string($conn,$marcaCarvao);
- 
-      $preçoCarvao = sanitize(($_GET["preçoCarvao"]));
-      $preçoCarvao = mysqli_real_escape_string($conn,$preçoCarvao);
+        $alturaSteam = sanitize($_GET["alturaSteam"]);
+        $alturaSteam = mysqli_real_escape_string($conn,$alturaSteam);
 
-      $quantidadeCarvao = sanitize(($_GET["quantidadeCarvao"]));
-      $quantidadeCarvao = mysqli_real_escape_string($conn,$quantidadeCarvao);
+        $quantidadeSteam = sanitize($_GET["quantidadeSteam"]);
+        $quantidadeSteam = mysqli_real_escape_string($conn,$quantidadeSteam);
 
-      if(empty($marcaCarvao) and empty($preçoCarvao) and empty($quantidadeCarvao)) {
-        $sql = "SELECT * from carvao";
-          if(!($carvoes = mysqli_query($conn,$sql))){
-            die("Problemas para carregar os carvões do BD!<br>".
+        $materialSteam = sanitize($_GET["materialSteam"]);
+        $materialSteam = mysqli_real_escape_string($conn,$materialSteam);
+        
+        $precoSteam = sanitize(($_GET["precoSteam"]));
+        $precoSteam = mysqli_real_escape_string($conn,$precoSteam);
+
+      if(empty($marcaSteam) and empty($precoSteam) and empty($alturaSteam) and empty($materialSteam) and empty($quantidadeSteam) ) {
+        $sql = "SELECT * from steam";
+          if(!($steans = mysqli_query($conn,$sql))){
+            die("Problemas para carregar as Steams do BD!<br>".
                  mysqli_error($conn));}
         }else{
-          $sql = "SELECT * from carvao WHERE marca = '$marcaCarvao' or preco = '$preçoCarvao' or quantidade ='$quantidadeCarvao' ";
-          if(!($carvoes = mysqli_query($conn,$sql))){
-            die("Problemas para carregar as Essencias do BD!<br>".
+          $sql = "SELECT * from steam WHERE marca = '$marcaSteam' or altura='$alturaSteam'  or quantidade='$quantidadeSteam' or material='$materialSteam' or preco = '$precoSteam' ";
+          if(!($steans = mysqli_query($conn,$sql))){
+            die("Problemas para carregar as Steams do BD!<br>".
                  mysqli_error($conn));
           }
         }
@@ -79,12 +90,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
     }elseif (isset($_GET["excluir"]) == "excluir") {
       
       $num = $_GET["excluir"];
-      $sql = "DELETE from carvao WHERE id_carvao='$num'";
-        if(mysqli_query($conn,$sql)){
-          echo '<script>alert("Carvão excluído com sucesso!"); </script>';  
-        }else{
-          echo '<script>alert("Erro ao excluir carvão!"); </script>';  
-        }
+        $sql = "DELETE from steam WHERE id_steam='$num'";
+          if(mysqli_query($conn,$sql)){
+            echo '<script>alert("Steam excluída com sucesso!"); </script>';  
+          }else{
+            echo '<script>alert("Erro ao excluir steam!"); </script>';  
+          }
 
     }
 
@@ -143,7 +154,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" href="#">Usuários</a>
-              AW2 
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="logout.php">Logout</a>
             </div>
@@ -160,9 +170,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                 <h3>Hookah Bar</h3>
             </div> -->
 
-             <ul class="sidebar navbar-nav">
+           <ul class="sidebar navbar-nav">
                 <li>
                     <a href="pedidos.php">Pedidos</a>
+                </li>
+                <li>
+                    <a href="vendas.php">Vendas</a>
                 </li>
                 <li class="active">
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Produtos</a>
@@ -214,14 +227,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                   <li class="breadcrumb-item">
                     <a href="pedidos.php">Dashboard Pedido</a>
                   </li>
-                  <li class="breadcrumb-item active">Produtos - Carvão</li>
+                  <li class="breadcrumb-item active">Produtos - Steam</li>
               </ol>
             </div>
           </div>   
           <div class="card">
                   <div class="card-header">
                     <!-- <i class="fas fa-table"></i> -->
-                    <h3>Carvão</h3>
+                    <h3>Steam</h3>
                   </div>
                
                   <div class="card-body">
@@ -233,15 +246,19 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 <h3>Pesquisar</h3>
                               </div> -->
                             <div class="row">
-                              <div class="col-md-6">                  
+                              <div class="col-md-6">                   
                                 <label for="exampleFormControlInput1">Marca</label>
-                                <input type="text" class="form-control" id="marcaCarvao" name="marcaCarvao" placeholder="Marca">
-                                <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" step="0.01" min="0" id="preçoCarvao" name="preçoCarvao" placeholder="Preço">
+                                <input type="text" class="form-control" id="marcaSteam" name="marcaSteam" placeholder="Marca">
+                                <label for="exampleFormControlInput1">Altura</label>
+                                <input type="number" class="form-control" step="0.01" min="0" id="alturaSteam" name="alturaSteam" placeholder="Altura(cm)">
+                                <label for="exampleFormControlInput1">Material</label>
+                                <input type="text" class="form-control" id="materialSteam" name="materialSteam" placeholder="Material">
                               </div>  
-                              <div class="col-md-6 ">                                  
-                                <label for="exampleFormControlInput1">Quantidade de Caixas</label>
-                                <input type="number" class="form-control" id="quantidadeCarvao" name="quantidadeCarvao" placeholder="Quantidade"> 
+                              <div class="col-md-6 ">
+                                <label for="exampleFormControlInput1">Quantidade</label>
+                                <input type="number" class="form-control" id="quantidadeSteam" step="0.5" min="0" name="quantidadeSteam" placeholder="Quantidade">
+                                <label for="exampleFormControlInput1">Preço</label>
+                                <input type="number" class="form-control" id="precoSteam" step="0.01" min="0" name="precoSteam" placeholder="Preço">
                                 <br>  
                                 <button class="btn btn-primary" type="submit" id="cadastrar" class="floated" name="cadastrar" value="cadastrar">Cadastrar</button>
                                 <button class="btn btn-primary" type="submit" id="pesquisar" class="floated" name="pesquisar" value="pesquisar">Pesquisar</button>  
@@ -256,16 +273,18 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 <thead>
                                   <tr>
                                     <th>Marca</th>
-                                    <th>Preço</th>
-                                    <th>Quantidade(Caixas)</th>
+                                    <th>Altura</th>
+                                    <th>Material</th>
+                                    <th>Quantidade</th>
+                                    <th>Preço</th> 
                                     <th>Ação</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <?php if(isset($carvoes)){ ?>
-                                    <?php if(mysqli_num_rows($carvoes) > 0): ?>
-                                      <?php while($uni = mysqli_fetch_assoc($carvoes)): ?> 
-                                        <?php echo '<tr><td>'. $uni["marca"] . '</td><td>' . 'R$ ' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a class="btn btn-primary" href=carvaoEdit.php?id='.$uni["id_carvao"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_carvao"].'>Excluir</button>' . '</td></tr>' ?>
+                                  <?php if(isset($steans)){ ?>
+                                    <?php if(mysqli_num_rows($steans) > 0): ?>
+                                      <?php while($uni = mysqli_fetch_assoc($steans)): ?> 
+                                        <?php echo '<tr><td>'. $uni["marca"] . '</td><td>' . $uni["altura"] . '</td><td>' . $uni["material"] . '</td><td>' . $uni["quantidade"] . '</td><td>'. 'R$ ' . $uni["preco"] . '</td><td>' . '<a class="btn btn-primary" href=steamEdit.php?id='. $uni["id_steam"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_steam"].'>Excluir</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>

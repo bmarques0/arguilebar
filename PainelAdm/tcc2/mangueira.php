@@ -1,6 +1,7 @@
 <?php
 require 'db_credentials.php';
 require 'authenticate.php';
+require 'lib/sanitize.php';
 
 if(!$login){
   header("Location: " . dirname($_SERVER['SCRIPT_NAME']) . "/login.php");}
@@ -12,83 +13,94 @@ if (!$conn) {
        mysqli_connect_error());
 }
 
+if(isset($_GET["msg"])){
+    echo "<script>alert('".$_GET['msg']."');</script>";
+}
+
 
 if ($_SERVER["REQUEST_METHOD"] == "GET"){  
 
       if(isset($_GET["cadastrar"]) == "cadastrar"){
 
-        $mysqlImg="";
-        $imagem = $_FILES["image"];
-        $marcaEssencia = ($_GET["marcaEssencia"]);
-        $preçoEssencia = ($_GET["preçoEssencia"]);
-        $saborEssencia = ($_GET["saborEssencia"]);
-        $categoriaEssencia = ($_GET["categoriaEssencia"]);
+        $marcaMangueira = sanitize($_GET["marcaMangueira"]);
+        $marcaMangueira = mysqli_real_escape_string($conn,$marcaMangueira);
+
+        $corMangueira = sanitize($_GET["corMangueira"]);
+        $corMangueira = mysqli_real_escape_string($conn,$corMangueira);
+
+        $materialMangueira = sanitize($_GET["materialMangueira"]);
+        $materialMangueira = mysqli_real_escape_string($conn,$materialMangueira);
+
+        $comprimentoMangueira = sanitize($_GET["comprimentoMangueira"]);
+        $comprimentoMangueira = mysqli_real_escape_string($conn,$comprimentoMangueira);
         
+        $precoMangueira = sanitize(($_GET["precoMangueira"]));
+        $precoMangueira = mysqli_real_escape_string($conn,$precoMangueira);
 
-        if($imagem != null){
-          $nomeFinal = time().'.jpg';
-          if(move_uploaded_file($imagem['tmp_name'], $nomeFinal)) { //valida se o arquivo é um arquivo de upload valido
-            $tamanhoImg = filesize($nomeFinal); //pega o tamnho do arquivo
-            $mysqlImg = addslashes(fread(fopen($nomeFinal, "r"), $tamanhoImg)); // abre o arquivo, le o arquivo e prepara-o
-            echo "imagem preparada com sucesso";     
-          }  
-        }
+        $quantidadeMangueira = sanitize(($_GET["quantidadeMangueira"]));
+        $quantidadeMangueira = mysqli_real_escape_string($conn,$quantidadeMangueira);
 
 
-        if(empty(($_GET["marcaEssencia"])) and empty($preçoEssencia) and empty(($_GET["saborEssencia"])) and empty(($_GET["categoriaEssencia"]))){
-          echo "Preencha todos os campos";
-        }elseif(empty(($_GET["marcaEssencia"]))  or empty($preçoEssencia) or empty(($_GET["saborEssencia"])) or empty(($_GET["categoriaEssencia"]))) {
-          echo "Preencha um dos campos";
-        }elseif(!empty(($_GET["marcaEssencia"])) and !empty($preçoEssencia) and !empty(($_GET["saborEssencia"])) and !empty(($_GET["categoriaEssencia"]))) {
+        if(empty($marcaMangueira) and empty($precoMangueira) and empty($corMangueira) and empty($comprimentoMangueira) and empty($materialMangueira) and empty($quantidadeMangueira) )  {
+          echo '<script>alert("Favor preencher todos os campos!"); </script>'; 
+        }elseif(empty($marcaMangueira)  or empty($precoMangueira) or empty($corMangueira) or empty($comprimentoMangueira) or empty($materialMangueira) or empty($quantidadeMangueira) ) {
+          echo '<script>alert("Favor preencher todos os campos!"); </script>';
+        }elseif(!empty($marcaMangueira) and !empty($precoMangueira) and !empty($corMangueira) and !empty($comprimentoMangueira) and !empty($materialMangueira) and !empty($quantidadeMangueira)) {
 
-          $bt = $_GET["cadastrar"];
+          $sql = "INSERT into mangueira(`marca`, `cor`, `material`, `comprimento`, `preco`, `quantidade`) values ('$marcaMangueira', '$corMangueira', '$materialMangueira', '$comprimentoMangueira', '$precoMangueira', '$quantidadeMangueira');";
 
-          $sql = "INSERT into essencia(`categoria`,`marca`,`preco`,`sabor`,`essenciaImg`) values ('$categoriaEssencia', '$marcaEssencia', '$preçoEssencia', '$saborEssencia', '$mysqlImg')";
-          unlink($imagem);
           if(!mysqli_query($conn,$sql)){
-            die("Problemas para cadastrar Essencia!<br>".
+            die("Problemas para cadastrar mangueira!<br>".
                  mysqli_error($conn));
           }else{
-            echo "Cadastrado com sucesso";
+            echo '<script>alert("Mangueira cadastrada com sucesso!"); </script>'; 
           }  
         }
       
         
     }elseif(isset($_GET["pesquisar"]) == "pesquisar"){
        
-      $bt = $_GET["pesquisar"];
+        $bt = $_GET["pesquisar"];
 
-      $marcaEssencia = ($_GET["marcaEssencia"]);
-      $preçoEssencia = ($_GET["preçoEssencia"]);
-      $saborEssencia = ($_GET["saborEssencia"]);
-      $categoriaEssencia = ($_GET["categoriaEssencia"]);
+        $marcaMangueira = sanitize($_GET["marcaMangueira"]);
+        $marcaMangueira = mysqli_real_escape_string($conn,$marcaMangueira);
 
-      if(empty($marcaEssencia) and empty($preçoEssencia) and empty($saborEssencia) and empty($categoriaEssencia)) {
-        $sql = "SELECT * from essencia";
-          if(!($essencias = mysqli_query($conn,$sql))){
-            die("Problemas para carregar as Essencias do BD!<br>".
+        $corMangueira = sanitize($_GET["corMangueira"]);
+        $corMangueira = mysqli_real_escape_string($conn,$corMangueira);
+
+        $materialMangueira = sanitize($_GET["materialMangueira"]);
+        $materialMangueira = mysqli_real_escape_string($conn,$materialMangueira);
+
+        $comprimentoMangueira = sanitize($_GET["comprimentoMangueira"]);
+        $comprimentoMangueira = mysqli_real_escape_string($conn,$comprimentoMangueira);
+        
+        $precoMangueira = sanitize(($_GET["precoMangueira"]));
+        $precoMangueira = mysqli_real_escape_string($conn,$precoMangueira);
+
+        $quantidadeMangueira = sanitize(($_GET["quantidadeMangueira"]));
+        $quantidadeMangueira = mysqli_real_escape_string($conn,$quantidadeMangueira);
+
+      if(empty($marcaMangueira) and empty($corMangueira) and empty($materialMangueira) and empty($comprimentoMangueira) and empty($precoMangueira) and empty($quantidadeMangueira)) {
+        $sql = "SELECT * from mangueira";
+          if(!($mangueiras = mysqli_query($conn,$sql))){
+            die("Problemas para carregar as mangueiras do BD!<br>".
                  mysqli_error($conn));}
         }else{
-          $sql = "SELECT * from essencia WHERE marca = '$marcaEssencia' or preco = '$preçoEssencia' or categoria = '$categoriaEssencia'  or sabor = '$saborEssencia'";
-          if(!($essencias = mysqli_query($conn,$sql))){
-            die("Problemas para carregar as Essencias do BD!<br>".
+          $sql = "SELECT * from mangueira WHERE marca = '$marcaMangueira' or cor='$corMangueira'  or material='$materialMangueira' or comprimento='$comprimentoMangueira' or preco = '$precoMangueira' or quantidade = '$quantidadeMangueira'";
+          if(!($steans = mysqli_query($conn,$sql))){
+            die("Problemas para carregar as Steams do BD!<br>".
                  mysqli_error($conn));
           }
         }
-    }elseif(isset($_GET["editar"]) == "editar") {
-
-      $marcaEssencia = ($_GET["marca"]);
-      
-      echo $marcaEssencia;
 
     }elseif (isset($_GET["excluir"]) == "excluir") {
       
       $num = $_GET["excluir"];
-        $sql = "DELETE from essencia WHERE id_essencia='$num'";
+        $sql = "DELETE from mangueira WHERE id_mangueira='$num'";
           if(mysqli_query($conn,$sql)){
-            echo "Excluido com sucesso!";  
+            echo '<script>alert("Mangueira excluída com sucesso!"); </script>'; 
           }else{
-            echo "ERRO ao excluir registro";  
+            echo '<script>alert("Erro ao excluir mangueira!"); </script>'; 
           }
 
     }
@@ -148,7 +160,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <a class="dropdown-item" href="#">Usuários</a>
-              
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="logout.php">Logout</a>
             </div>
@@ -165,44 +176,50 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                 <h3>Hookah Bar</h3>
             </div> -->
 
-            <ul class="sidebar navbar-nav">
+           <ul class="sidebar navbar-nav">
                 <li>
                     <a href="pedidos.php">Pedidos</a>
+                </li>
+                <li>
+                    <a href="vendas.php">Vendas</a>
                 </li>
                 <li class="active">
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Produtos</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
-                            <a href="#">Carvão</a>
+                            <a href="carvao.php">Carvão</a>
                         </li>
                         <li>
-                            <a href="#">Alumínio</a>
+                            <a href="aluminio.php">Alumínio</a>
                         </li>
                         <li>
                             <a href="Essencia.php">Essência</a>
                         </li>
                         <li>
-                            <a href="#">Rosh</a>
+                            <a href="rosh.php">Rosh</a>
                         </li>
                         <li>
-                            <a href="#">Steam</a>
+                            <a href="steam.php">Steam</a>
                         </li>
                         <li>
-                            <a href="#">Mangueira</a>
+                            <a href="mangueira.php">Mangueira</a>
                         </li>
                         <li>
-                            <a href="#">Vaso</a>
+                            <a href="vaso.php">Vaso</a>
                         </li>
                         <li>
-                            <a href="#">Bebidas</a>
+                            <a href="bebida.php">Bebidas</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#">Funcionário</a>
+                    <a href="mesas.php">Mesas</a>
                 </li>
                 <li>
-                    <a href="#">Relatório</a>
+                    <a href="funcionario.php">Funcionário</a>
+                </li>
+                <li>
+                    <a href="relatorio.php">Relatório</a>
                 </li>
             </ul>
         </nav>
@@ -214,16 +231,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             <div class="container-fluid">  
               <ol class="breadcrumb">
                   <li class="breadcrumb-item">
-                    <a href="index.php">Dashboard Pedido</a>
+                    <a href="pedidos.php">Dashboard Pedido</a>
                   </li>
-                  <li class="breadcrumb-item active">Produtos - Essência</li>
+                  <li class="breadcrumb-item active">Produtos - Mangueira</li>
               </ol>
             </div>
           </div>   
           <div class="card">
                   <div class="card-header">
                     <!-- <i class="fas fa-table"></i> -->
-                    <h3>Essência</h3>
+                    <h3>Mangueira</h3>
                   </div>
                
                   <div class="card-body">
@@ -235,51 +252,49 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 <h3>Pesquisar</h3>
                               </div> -->
                             <div class="row">
-                              <div class="col-md-6">                  
-                                <label for="exampleFormControlSelect1">Categoria</label>
-                                <select class="form-control" id="categoriaEssencia" name="categoriaEssencia">
-                                    <option></option>
-                                    <option>Premium</option>
-                                    <option>Normal</option>   
-                                </select>
+                              <div class="col-md-6">                   
                                 <label for="exampleFormControlInput1">Marca</label>
-                                <input type="text" class="form-control" id="marcaEssencia" name="marcaEssencia" placeholder="Marca">
-                                <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoEssencia" name="preçoEssencia" placeholder="Preço">
+                                <input type="text" class="form-control" id="marcaMangueira" name="marcaMangueira" placeholder="Marca">
+                                <label for="exampleFormControlInput1">Cor</label>
+                                <input type="text" class="form-control" id="corMangueira" name="corMangueira" placeholder="Cor">
+                                <label for="exampleFormControlInput1">Material</label>
+                                <input type="text" class="form-control" id="materialMangueira" name="materialMangueira" placeholder="Material">
                               </div>  
-                              <div class="col-md-6 ">  
-                                
-                                <label for="exampleFormControlInput1">Sabor</label>
-                                <input type="text" class="form-control" id="saborEssencia" name="saborEssencia" placeholder="Sabor">
-                                <label for="exampleFormControlInput1">Escolha um arquivo de imagem</label>
-                                <input type="file" accept="image/png, image/jpeg" class="form-control" id="image" name="image">  
+                              <div class="col-md-6 ">
+                                <label for="exampleFormControlInput1">Comprimento</label>
+                                <input type="number" class="form-control" step="0.01" min="0" id="comprimentoMangueira" name="comprimentoMangueira" placeholder="Comprimento (cm)">
+                                <label for="exampleFormControlInput1">Quantidade</label>
+                                <input type="number" class="form-control" id="quantidadeMangueira" step="0.5" min="0" name="quantidadeMangueira" placeholder="Quantidade">
+                                <label for="exampleFormControlInput1">Preço</label>
+                                <input type="number" class="form-control" id="precoMangueira" step="0.01" min="0" name="precoMangueira" placeholder="Preço">
                                 <br>  
                                 <button class="btn btn-primary" type="submit" id="cadastrar" class="floated" name="cadastrar" value="cadastrar">Cadastrar</button>
-                                <button class="btn btn-primary" type="submit" id="pesquisar" class="floated" name="pesquisar" value="pesquisar">Pesquisar</button>  
+                                <button class="btn btn-primary" type="submit" id="pesquisar" class="floated" name="pesquisar" value="pesquisar">Pesquisar</button> 
                               </div>
                             </div>               
                           </div>
-                      </form>  
+                  
                           <!-- DIV CONSULTA ESCONDIDO -->
                           <br>
-                          <form  method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">  
                             <div class="table-responsive" id="conteudo">
                               <table class="table table-bordered" id="tableResultado" width="100%" cellspacing="0">
                                 <thead>
                                   <tr>
-                                    <th>ID Essência</th>
-                                    <th>Categoria</th>
-                                    <th>Sabor</th>
+                                    <th>ID Mangueira</th>
                                     <th>Marca</th>
-                                    <th>Preço</th>
+                                    <th>Cor</th>
+                                    <th>Material</th>
+                                    <th>Comprimento (cm)</th>
+                                    <th>Quantidade</th>
+                                    <th>Preço</th> 
                                     <th>Ação</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <?php if(isset($essencias)){ ?>
-                                    <?php if(mysqli_num_rows($essencias) > 0): ?>
-                                      <?php while($uni = mysqli_fetch_assoc($essencias)): ?>
-                                        <?php echo '<tr><td>'. $uni["id_essencia"] . '</td><td>' . $uni["categoria"] . '</td><td>' . $uni["sabor"] . '</td><td>' . '<input type="text" class="form-control" id="marcaEssencia" name="marcaEssencia" value='.$uni["marca"].'> '. '</td><td>' . $uni["preco"] . '</td><td>' . '<button class="btn btn-primary" type="submit" id="editar"  name="editar" value='.$uni["id_essencia"].'>Editar</button>' . ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_essencia"].'>Excluir</button>' . '</td></tr>' ?>
+                                  <?php if(isset($mangueiras)){ ?>
+                                    <?php if(mysqli_num_rows($mangueiras) > 0): ?>
+                                      <?php while($uni = mysqli_fetch_assoc($mangueiras)): ?> 
+                                        <?php echo '<tr><td>'. $uni["id_mangueira"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["cor"] . '</td><td>' . $uni["material"] . '</td><td>' . $uni["comprimento"] . '</td><td>'. $uni["quantidade"] . '</td><td>'. 'R$ ' . $uni["preco"] . '</td><td>' . '<a class="btn btn-primary" href=mangueiraEdit.php?id='.$uni["id_mangueira"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_mangueira"].'>Excluir</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>
@@ -289,7 +304,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 </tbody>
                               </table>
                             </div>
-                          </form>
                           <!-- FIM DIV ESCONDIDA -->
                           
 

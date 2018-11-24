@@ -52,7 +52,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             die("Problemas para atualizar Carvao!<br>".
                  mysqli_error($conn));
           }else{
-           echo "Atualizado com sucesso";
+           $msg = "Carvão alterado com sucesso!"; 
+           header('Location: /tcc2/carvao.php?msg='.$msg); 
           }
 
         }    
@@ -204,11 +205,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 <label for="exampleFormControlInput1">Marca</label>
                                 <input type="text" class="form-control" id="marcaCarvao" name="marcaCarvao" value="<?php echo $carvao["marca"] ?>">
                                 <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoCarvao" name="preçoCarvao" value="<?php echo $carvao["preco"] ?>">
+                                <input type="number" class="form-control" step="0.01" min="0"  id="preçoCarvao" name="preçoCarvao" value="<?php echo $carvao["preco"] ?>">
                               </div>  
                               <div class="col-md-6 ">                                
                                 <label for="exampleFormControlInput1">Quantidade de Caixas</label>
-                                <input type="number" class="form-control" id="quantidadeCarvao" name="quantidadeCarvao" value="<?php echo $carvao["quantidade"] ?>">  
+                                <input type="number" class="form-control" step="0.5" min="0"  id="quantidadeCarvao" name="quantidadeCarvao" value="<?php echo $carvao["quantidade"] ?>">  
                                 <input type="hidden" class="form-control" id="id" name="id" value="<?php echo $carvao["id_carvao"] ?>">
                                 <br>  
                                 <button class="btn btn-primary" type="submit" id="confirmar" class="floated" name="confirmar">Alterar</button>

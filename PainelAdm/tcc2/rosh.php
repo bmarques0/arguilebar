@@ -13,6 +13,9 @@ if (!$conn) {
        mysqli_connect_error());
 }
 
+if(isset($_GET["msg"])){
+    echo "<script>alert('".$_GET['msg']."');</script>";
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "GET"){  
 
@@ -38,9 +41,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 
 
         if(empty($marcaRosh) and empty($preçoRosh) and empty($quantidadeRosh) and empty($corRosh) and empty($tamanhoRosh) and empty($materialRosh) )  {
-          echo "Preencha todos os campos";
+          echo '<script>alert("Favor preencher todos os campos!"); </script>'; 
         }elseif(empty($marcaRosh)  or empty($preçoRosh) or empty($quantidadeRosh) or empty($corRosh) or empty($tamanhoRosh) or empty($materialRosh) ) {
-          echo "Preencha um dos campos";
+          echo '<script>alert("Favor preencher todos os campos!"); </script>'; 
         }elseif(!empty($marcaRosh) and !empty($preçoRosh) and !empty($quantidadeRosh) and !empty($corRosh) and !empty($tamanhoRosh) and !empty($materialRosh) ) {
 
 
@@ -50,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             die("Problemas para cadastrar Rosh!<br>".
                  mysqli_error($conn));
           }else{
-            echo "Cadastrado com sucesso";
+            echo '<script>alert("Rosh cadastrado com sucesso!"); </script>'; 
           }  
         }
       
@@ -95,9 +98,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
       $num = $_GET["excluir"];
         $sql = "DELETE from rosh WHERE id_rosh='$num'";
           if(mysqli_query($conn,$sql)){
-            echo "Excluido com sucesso!";  
+            echo '<script>alert("Rosh excluído com sucesso!"); </script>';   
           }else{
-            echo "ERRO ao excluir registro";  
+            echo '<script>alert("Erro ao excluir Rosh!"); </script>'; 
           }
 
     }
@@ -260,10 +263,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                               </div>  
                               <div class="col-md-6 ">
                                 <label for="exampleFormControlInput1">Tamanho</label>
-                                <input type="number" class="form-control" id="tamanhoRosh" name="tamanhoRosh" placeholder="Tamanho">                              <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoRosh" name="preçoRosh" placeholder="Preço">
+                                <input type="number" class="form-control" id="tamanhoRosh" name="tamanhoRosh" placeholder="Tamanho (cm)">                         
+                                <label for="exampleFormControlInput1">Preço</label>
+                                <input type="number" class="form-control" id="preçoRosh" step="0.01" min="0" name="preçoRosh" placeholder="Preço">
                                 <label for="exampleFormControlInput1">Quantidade</label>
-                                <input type="number" class="form-control" id="quandidadeRosh" name="quantidadeRosh" placeholder="Quantidade">
+                                <input type="number" class="form-control" id="quandidadeRosh" step="0.5" min="0" name="quantidadeRosh" placeholder="Quantidade">
                                 <br>  
                                 <button class="btn btn-primary" type="submit" id="cadastrar" class="floated" name="cadastrar" value="cadastrar">Cadastrar</button>
                                 <button class="btn btn-primary" type="submit" id="pesquisar" class="floated" name="pesquisar" value="pesquisar">Pesquisar</button>  
@@ -277,7 +281,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                               <table class="table table-bordered" id="tableResultado" width="100%" cellspacing="0">
                                 <thead>
                                   <tr>
-                                    <th>ID Rosh</th>
                                     <th>Marca</th>
                                     <th>Cor</th>
                                     <th>Material</th>
@@ -291,7 +294,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                   <?php if(isset($roshs)){ ?>
                                     <?php if(mysqli_num_rows($roshs) > 0): ?>
                                       <?php while($uni = mysqli_fetch_assoc($roshs)): ?> 
-                                        <?php echo '<tr><td>'. $uni["id_rosh"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["cor"] . '</td><td>' . $uni["material"] . '</td><td>' . $uni["tamanho"] . '</td><td>'. $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a href=roshEdit.php?id='.$uni["id_rosh"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_rosh"].'>Excluir</button>' . '</td></tr>' ?>
+                                        <?php echo '<tr><td>' . $uni["marca"] . '</td><td>' . $uni["cor"] . '</td><td>' . $uni["material"] . '</td><td>' . $uni["tamanho"] . '</td><td>'. 'R$ ' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a class="btn btn-primary" href=roshEdit.php?id='.$uni["id_rosh"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_rosh"].'>Excluir</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>

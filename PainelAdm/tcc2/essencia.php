@@ -13,13 +13,16 @@ if (!$conn) {
        mysqli_connect_error());
 }
 
+if(isset($_GET["msg"])){
+    echo "<script>alert('".$_GET['msg']."');</script>";
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "GET"){  
 
       if(isset($_GET["cadastrar"]) == "cadastrar"){
 
-        $mysqlImg="";
-        $imagem = $_FILES["image"];
+        $mysqlImg=false;
+        
 
         $marcaEssencia = sanitize($_GET["marcaEssencia"]);
         $marcaEssencia = mysqli_real_escape_string($conn,$marcaEssencia);
@@ -36,30 +39,52 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
         $quantidadeEssencia = sanitize(($_GET["quantidadeEssencia"]));
         $quantidadeEssencia = mysqli_real_escape_string($conn,$quantidadeEssencia);
 
-        if($imagem != null){
-          $nomeFinal = time().'.jpg';
-          if(move_uploaded_file($imagem['tmp_name'], $nomeFinal)) { //valida se o arquivo é um arquivo de upload valido
-            $tamanhoImg = filesize($nomeFinal); //pega o tamnho do arquivo
-            $mysqlImg = addslashes(fread(fopen($nomeFinal, "r"), $tamanhoImg)); // abre o arquivo, le o arquivo e prepara-o
-            echo "imagem preparada com sucesso";     
-          }  
-        }
+        $descricaEssencia = sanitize(($_GET["descricaEssencia"]));
+        $descricaEssencia = mysqli_real_escape_string($conn,$descricaEssencia);
+
+/*        if($_FILES["image"]){
+          if($imagem != null){
+            $nomeFinal = time().'.jpg';
+            if(move_uploaded_file($imagem['tmp_name'], $nomeFinal)) { //valida se o arquivo é um arquivo de upload valido
+              $tamanhoImg = filesize($nomeFinal); //pega o tamnho do arquivo
+              $mysqlImg = addslashes(fread(fopen($nomeFinal, "r"), $tamanhoImg)); // abre o arquivo, le o arquivo e prepara-o
+              echo "imagem preparada com sucesso";     
+            }  
+          }
+        }    
+*/
+
+        if(isset($_FILES["image"])) {
+
+          echo "entrou no files";
+
+          $extensao = strtolower(substr($_FILES['image']['name'], -4));
+
+          $novo_nome = md5(time()) . $extensao;
+
+          $diretorio = "tcc/img";  
+
+          move_uploaded_file($_FILES['image']['tmp_name'], $diretorio.$novo_nome);      
+
+        }      
 
 
-        if(empty(($_GET["marcaEssencia"])) and empty($preçoEssencia) and empty(($_GET["saborEssencia"])) and empty(($_GET["categoriaEssencia"]))){
-          echo "Preencha todos os campos";
-        }elseif(empty(($_GET["marcaEssencia"]))  or empty($preçoEssencia) or empty(($_GET["saborEssencia"])) or empty(($_GET["categoriaEssencia"]))) {
-          echo "Preencha um dos campos";
-        }elseif(!empty(($_GET["marcaEssencia"])) and !empty($preçoEssencia) and !empty(($_GET["saborEssencia"])) and !empty(($_GET["categoriaEssencia"]))) {
+        if(empty($marcaEssencia) and empty($preçoEssencia) and empty($saborEssencia) and empty($categoriaEssencia) and empty($descricaEssencia) ) {
+          echo '<script>alert("Favor preencher todos os campos!"); </script>';         
+        }elseif(empty($marcaEssencia)  or empty($preçoEssencia) or empty($saborEssencia) or empty($categoriaEssencia) or empty($descricaEssencia) ) {
+          echo '<script>alert("Favor preencher todos os campos!"); </script>'; 
+        }elseif(!empty($marcaEssencia) and !empty($preçoEssencia) and !empty($saborEssencia) and !empty($categoriaEssencia) and !empty($descricaEssencia) ) {
 
 
-          $sql = "INSERT into essencia(`categoria`,`marca`,`preco`,`sabor`,`essenciaImg`) values ('$categoriaEssencia', '$marcaEssencia', '$preçoEssencia', '$saborEssencia', '$mysqlImg')";
-          unlink($imagem);
+          $sql = "INSERT into essencia(`categoria`,`marca`,`preco`,`sabor`,`essenciaImg`, `descricao`) values ('$categoriaEssencia', '$marcaEssencia', '$preçoEssencia', '$saborEssencia', '$novo_nome', '$descricaEssencia')";
+          
+          //unlink($imagem);
+          
           if(!mysqli_query($conn,$sql)){
             die("Problemas para cadastrar Essencia!<br>".
                  mysqli_error($conn));
           }else{
-            echo "Cadastrado com sucesso";
+            echo '<script>alert("Essência cadastrada com sucesso!"); </script>'; 
           }  
         }
       
@@ -83,13 +108,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
       $quantidadeEssencia = sanitize(($_GET["quantidadeEssencia"]));
       $quantidadeEssencia = mysqli_real_escape_string($conn,$quantidadeEssencia);
 
-      if(empty($marcaEssencia) and empty($preçoEssencia) and empty($saborEssencia) and empty($categoriaEssencia) and empty($quantidadeEssencia)) {
+      $descricaEssencia = sanitize(($_GET["descricaEssencia"]));
+      $descricaEssencia = mysqli_real_escape_string($conn,$descricaEssencia);
+
+      if(empty($marcaEssencia) and empty($preçoEssencia) and empty($saborEssencia) and empty($categoriaEssencia) and empty($quantidadeEssencia) and empty($descricaEssencia)) {
         $sql = "SELECT * from essencia";
           if(!($essencias = mysqli_query($conn,$sql))){
             die("Problemas para carregar as Essencias do BD!<br>".
                  mysqli_error($conn));}
         }else{
-          $sql = "SELECT * from essencia WHERE marca = '$marcaEssencia' or preco = '$preçoEssencia' or categoria = '$categoriaEssencia'  or sabor = '$saborEssencia' or quantidade ='$quantidadeEssencia' ";
+          $sql = "SELECT * from essencia WHERE marca = '$marcaEssencia' or preco = '$preçoEssencia' or categoria = '$categoriaEssencia'  or sabor = '$saborEssencia' or quantidade ='$quantidadeEssencia' or descricao='$descricaEssencia' ";
           if(!($essencias = mysqli_query($conn,$sql))){
             die("Problemas para carregar as Essencias do BD!<br>".
                  mysqli_error($conn));
@@ -101,9 +129,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
       $num = $_GET["excluir"];
         $sql = "DELETE from essencia WHERE id_essencia='$num'";
           if(mysqli_query($conn,$sql)){
-            echo "Excluido com sucesso!";  
+            echo '<script>alert("Essência excluída com sucesso!"); </script>';   
           }else{
-            echo "ERRO ao excluir registro";  
+            echo '<script>alert("Erro ao excluir essência!"); </script>'; 
           }
 
     }
@@ -265,14 +293,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 <label for="exampleFormControlInput1">Marca</label>
                                 <input type="text" class="form-control" id="marcaEssencia" name="marcaEssencia" placeholder="Marca">
                                 <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoEssencia" name="preçoEssencia" placeholder="Preço">
+                                <input type="number" class="form-control" id="preçoEssencia" step="0.01" min="0" name="preçoEssencia" placeholder="Preço">
+                                <label for="exampleFormControlInput1">Descrição</label>
+                                <textarea class="form-control" id="descricaEssencia" name="descricaEssencia" placeholder="Insira a descrição da essência, tal como sensação de fumo e sugestões de combinação"></textarea> 
                               </div>  
-                              <div class="col-md-6 ">  
+                              <div class="col-md-6 "> 
                                 
                                 <label for="exampleFormControlInput1">Sabor</label>
                                 <input type="text" class="form-control" id="saborEssencia" name="saborEssencia" placeholder="Sabor">
                                 <label for="exampleFormControlInput1">Quantidade de Caixas</label>
-                                <input type="number" class="form-control" id="preçoEssencia" name="quantidadeEssencia" placeholder="Quantidade">
+                                <input type="number" class="form-control" id="preçoEssencia" name="quantidadeEssencia" step="0.5" min="0" placeholder="Quantidade">
                                 <label for="exampleFormControlInput1">Escolha um arquivo de imagem</label>
                                 <input type="file" accept="image/png, image/jpeg" class="form-control" id="image" name="image">  
                                 <br>  
@@ -288,12 +318,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                               <table class="table table-bordered" id="tableResultado" width="100%" cellspacing="0">
                                 <thead>
                                   <tr>
-                                    <th>ID Essência</th>
                                     <th>Categoria</th>
                                     <th>Sabor</th>
                                     <th>Marca</th>
                                     <th>Preço</th>
                                     <th>Quantidade(Caixas)</th>
+                                    <th width="500px">Descrição</th>
                                     <th>Ação</th>
                                   </tr>
                                 </thead>
@@ -301,7 +331,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                   <?php if(isset($essencias)){ ?>
                                     <?php if(mysqli_num_rows($essencias) > 0): ?>
                                       <?php while($uni = mysqli_fetch_assoc($essencias)): ?> 
-                                        <?php echo '<tr><td>'. $uni["id_essencia"] . '</td><td>' . $uni["categoria"] . '</td><td>' . $uni["sabor"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a href=essenciaEdit.php?id='.$uni["id_essencia"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_essencia"].'>Excluir</button>' . '</td></tr>' ?>
+                                        <?php echo '<tr><td>'. $uni["categoria"] . '</td><td>' . $uni["sabor"] . '</td><td>' . $uni["marca"] . '</td><td>' . 'R$ ' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td width="500px">' . $uni["descricao"] .'</td><td>' .'<a class="btn btn-primary" href=essenciaEdit.php?id='.$uni["id_essencia"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_essencia"].'>Excluir</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>

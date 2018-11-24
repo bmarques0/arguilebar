@@ -28,6 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
         $essencia=mysqli_query($conn,$sql);
 
         $essencia=mysqli_fetch_assoc($essencia);
+
       }
       if(isset($_GET["confirmar"])){
          
@@ -52,13 +53,17 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
           $quantidadeEssencia = sanitize(($_GET["quantidadeEssencia"]));
           $quantidadeEssencia = mysqli_real_escape_string($conn,$quantidadeEssencia);
 
+          $descricaEssencia = sanitize(($_GET["descricaEssencia"]));
+          $descricaEssencia = mysqli_real_escape_string($conn,$descricaEssencia);
 
-          $sql = "UPDATE essencia SET essencia.categoria='$categoriaEssencia', essencia.marca='$marcaEssencia', essencia.preco='$preçoEssencia', essencia.sabor='$saborEssencia', essencia.quantidade='$quantidadeEssencia' where id_essencia=$id";
+
+          $sql = "UPDATE essencia SET essencia.categoria='$categoriaEssencia', essencia.marca='$marcaEssencia', essencia.preco='$preçoEssencia', essencia.sabor='$saborEssencia', essencia.quantidade='$quantidadeEssencia', essencia.descricao='$descricaEssencia' where id_essencia=$id";
           if(!mysqli_query($conn,$sql)){
             die("Problemas para atualizar Essencia!<br>".
                  mysqli_error($conn));
           }else{
-           echo "Atualizado com sucesso";
+           $msg = "Essência alterada com sucesso!"; 
+           header('Location: /tcc2/essencia.php?msg='.$msg);  
           }
 
         }    
@@ -215,14 +220,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 <label for="exampleFormControlInput1">Marca</label>
                                 <input type="text" class="form-control" id="marcaEssencia" name="marcaEssencia" value="<?php echo $essencia["marca"] ?>">
                                 <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoEssencia" name="preçoEssencia" value="<?php echo $essencia["preco"] ?>">
+                                <input type="number" class="form-control" step="0.01" min="0" id="preçoEssencia" name="preçoEssencia" value="<?php echo $essencia["preco"] ?>">
                               </div>  
                               <div class="col-md-6 ">                                
                                 <label for="exampleFormControlInput1">Quantidade de Caixas</label>
-                                <input type="number" class="form-control" id="quantidadeEssencia" name="quantidadeEssencia" value="<?php echo $essencia["quantidade"] ?>">  
+                                <input type="number" class="form-control" id="quantidadeEssencia" step="0.5" min="0" name="quantidadeEssencia" value="<?php echo $essencia["quantidade"] ?>">  
                                 <label for="exampleFormControlInput1">Sabor</label>
                                 <input type="text" class="form-control" id="saborEssencia" name="saborEssencia" value="<?php echo $essencia["sabor"] ?>">
                                 <input type="hidden" class="form-control" id="id" name="id" value="<?php echo $essencia["id_essencia"] ?>">
+                                <label for="exampleFormControlInput1">Descrição</label>
+                                <textarea class="form-control" id="descricaEssencia" name="descricaEssencia"><?php echo $essencia["descricao"] ?></textarea> 
                                 <br>  
                                 <button class="btn btn-primary" type="submit" id="confirmar" class="floated" name="confirmar">Alterar</button>
 

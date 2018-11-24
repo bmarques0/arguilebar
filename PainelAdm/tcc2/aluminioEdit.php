@@ -13,6 +13,8 @@ if (!$conn) {
        mysqli_connect_error());
 }
 
+
+
 if ($_SERVER["REQUEST_METHOD"] == "GET"){
     
     if(isset($_GET["id"])){  
@@ -53,7 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             die("Problemas para atualizar Alumínio!<br>".
                  mysqli_error($conn));
           }else{
-           echo "Atualizado com sucesso";
+           $msg = "Alumínio alterado com sucesso!"; 
+           header('Location: /tcc2/aluminio.php?msg='.$msg); 
           }
 
         }    

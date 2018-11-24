@@ -12,7 +12,9 @@ if (!$conn) {
   die("Problemas ao conectar com o BD!<br>".
        mysqli_connect_error());
 }
-
+if(isset($_GET["msg"])){
+    echo "<script>alert('".$_GET['msg']."');</script>";
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "GET"){  
 
@@ -41,9 +43,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 
 
         if(empty($marcaBebida) and empty($preçoBebida) and empty($quantidadeBebida) )  {
-          echo "Preencha todos os campos";
+          echo '<script>alert("Favor preencher todos os campos!"); </script>'; 
         }elseif(empty($marcaBebida)  or empty($preçoBebida) or empty($quantidadeBebida) ) {
-          echo "Preencha um dos campos";
+          echo '<script>alert("Favor preencher todos os campos!"); </script>'; 
         }elseif(!empty($marcaBebida) and !empty($preçoBebida) and !empty($quantidadeBebida)) {
 
 
@@ -53,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             die("Problemas para cadastrar Bebida!<br>".
                  mysqli_error($conn));
           }else{
-            echo "Cadastrado com sucesso";
+            echo '<script>alert("Bebida cadastrada com sucesso!"); </script>';           
           }  
         }
       
@@ -89,9 +91,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
       $num = $_GET["excluir"];
         $sql = "DELETE from bebida WHERE id_prodDiversos='$num'";
           if(mysqli_query($conn,$sql)){
-            echo "Excluido com sucesso!";  
+            echo '<script>alert("Bebida excluída com sucesso!"); </script>';   
           }else{
-            echo "ERRO ao excluir registro";  
+            echo '<script>alert("Erro ao excluir bebida!"); </script>'; 
           }
 
     }
@@ -249,11 +251,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 <label for="exampleFormControlInput1">Marca</label>
                                 <input type="text" class="form-control" id="marcaBebida" name="marcaBebida" placeholder="Marca">
                                 <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoBebida" name="preçoBebida" placeholder="Preço">
+                                <input type="number" step="0.01" min="0" class="form-control" id="preçoBebida" name="preçoBebida" placeholder="Preço">
                               </div>  
                               <div class="col-md-6 ">  
                                 <label for="exampleFormControlInput1">Quantidade</label>
-                                <input type="number" class="form-control" id="quandidadeBebida" name="quantidadeBebida" placeholder="Quantidade">
+                                <input type="number" class="form-control" step="0.5" min="0" id="quandidadeBebida" name="quantidadeBebida" placeholder="Quantidade">
                                 <label for="exampleFormControlInput1">Escolha um arquivo de imagem</label>
                                 <input type="file" accept="image/png, image/jpeg" class="form-control" id="image" name="image">  
                                 <br>  
@@ -269,7 +271,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                               <table class="table table-bordered" id="tableResultado" width="100%" cellspacing="0">
                                 <thead>
                                   <tr>
-                                    <th>ID Bebida</th>
                                     <th>Marca</th>
                                     <th>Preço</th>
                                     <th>Quantidade</th>
@@ -280,7 +281,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                   <?php if(isset($bebidas)){ ?>
                                     <?php if(mysqli_num_rows($bebidas) > 0): ?>
                                       <?php while($uni = mysqli_fetch_assoc($bebidas)): ?> 
-                                        <?php echo '<tr><td>'. $uni["id_prodDiversos"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a href=bebidaEdit.php?id='.$uni["id_prodDiversos"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_prodDiversos"].'>Excluir</button>' . '</td></tr>' ?>
+                                        <?php echo '<tr><td>' . $uni["marca"] . '</td><td>' . 'R$ ' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a class="btn btn-primary" href=bebidaEdit.php?id='.$uni["id_prodDiversos"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_prodDiversos"].'>Excluir</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>

@@ -1,7 +1,8 @@
 <?php
 require 'db_credentials.php';
-require "authenticate.php";
-
+require 'authenticate.php';
+require 'lib/sanitize.php';
+require "lib/functionsPHP.php";
 
 if(!$login){
   header("Location: " . dirname($_SERVER['SCRIPT_NAME']) . "/login.php");}
@@ -13,55 +14,63 @@ if (!$conn) {
        mysqli_connect_error());
 }
 
-$sql = "Select nomeMesa, sabor, group_concat(marca ORDER BY marca separator ', ') as marca, descricao, id_mesa, mesa_id_mesa
-FROM(
-  select m.nomeMesa, m.id_mesa, e.sabor, s.descricao, b.marca, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
-  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida ORDER BY m.nomeMesa
-) AS a
-group by nomeMesa";
+if ($_SERVER["REQUEST_METHOD"] == "GET"){
+    
+    if(isset($_GET["id"])){  
+      
+      $id=$_GET["id"];
+
+      $sql = "SELECT * from vaso where id_vaso='$id'";
+
+      if(!($vaso = mysqli_query($conn,$sql))){
+          die("Problemas para carregar os funcionários do BD!<br>".
+             mysqli_error($conn));
+      }else{
+        $vaso=mysqli_query($conn,$sql);
+
+        $vaso=mysqli_fetch_assoc($vaso);
+      }
+      if(isset($_GET["confirmar"])){
+        
+        /*if(!is_null(($_GET["marcaEssencia"]))  or !is_null(($_GET["preçoEssencia"])) or !is_null(($_GET["saborEssencia"])) or !is_null(($_GET["categoriaEssencia"]))) {
+          echo "preencha todos os campos";
+        }else{*/
+          $id=$_GET["id"];
+ 
+        $marcaVaso = sanitize($_GET["marcaVaso"]);
+        $marcaVaso = mysqli_real_escape_string($conn,$marcaVaso);
+
+        $tamanhoVaso = sanitize($_GET["tamanhoVaso"]);
+        $tamanhoVaso = mysqli_real_escape_string($conn,$tamanhoVaso);
+
+        $corVaso = sanitize($_GET["corVaso"]);
+        $corVaso = mysqli_real_escape_string($conn,$corVaso);
+
+        $diametroVaso = sanitize($_GET["diametroVaso"]);
+        $diametroVaso = mysqli_real_escape_string($conn,$diametroVaso);
+
+        $materialVaso = sanitize($_GET["materialVaso"]);
+        $materialVaso = mysqli_real_escape_string($conn,$materialVaso);
+
+        $precoVaso = sanitize(($_GET["precoVaso"]));
+        $precoVaso = mysqli_real_escape_string($conn,$precoVaso);
+        
+        $quantidadeVaso = sanitize(($_GET["quantidadeVaso"]));
+        $quantidadeVaso = mysqli_real_escape_string($conn,$quantidadeVaso);
 
 
-if (isset($_GET["preparar"]) == "preparar") {
-    $id=$_GET["preparar"];
-    $sql="UPDATE pedido set pedido.status_id_status='2' where pedido.mesa_id_mesa=$id";
-    if(!mysqli_query($conn,$sql)){
-            die("Problemas para alterar status do pedido!<br>".
+          $sql = "UPDATE vaso SET vaso.marca='$marcaVaso', vaso.tamanho='$tamanhoVaso', vaso.cor='$corVaso', vaso.diametro='$diametroVaso', vaso.material='$materialVaso', vaso.preco='$precoVaso', vaso.quantidade='$quantidadeVaso' where id_vaso=$id";
+          if(!mysqli_query($conn,$sql)){
+            die("Problemas para atualizar Vaso!<br>".
                  mysqli_error($conn));
+          }else{
+           $msg = "Vaso alterado com sucesso!"; 
+           header('Location: /tcc2/vaso.php?msg='.$msg); 
+          }
+
+        }    
+      }
     }
-    $sql = "Select nomeMesa, sabor, group_concat(marca ORDER BY marca separator ', ') as marca, descricao, id_mesa, mesa_id_mesa
-FROM(
-  select m.nomeMesa, m.id_mesa, e.sabor, s.descricao, b.marca, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
-  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida ORDER BY m.nomeMesa
-) AS a
-group by nomeMesa";
-
-}elseif(isset($_GET["finalizar"]) == "finalizar"){
-    $id=$_GET["finalizar"];
-    $sql="UPDATE pedido set pedido.status_id_status='3' where pedido.mesa_id_mesa=$id";
-    if(!mysqli_query($conn,$sql)){
-            die("Problemas para alterar status do pedido!<br>".
-                 mysqli_error($conn));
-    }
-    $sql = "Select nomeMesa, sabor, group_concat(marca ORDER BY marca separator ', ') as marca, descricao, id_mesa, mesa_id_mesa
-FROM(
-  select m.nomeMesa, m.id_mesa, e.sabor, s.descricao, b.marca, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
-  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida ORDER BY m.nomeMesa
-) AS a
-group by nomeMesa";
-}
-
-if(!($pedidos = mysqli_query($conn,$sql))){
-  die("Problemas para carregar as Essencias do BD!<br>".
-    mysqli_error($conn));
-  }
-
-$sql = "select * from funcionario";
-if(!($funcionarios = mysqli_query($conn,$sql))){
-  die("Problemas para carregar as Essencias do BD!<br>".
-    mysqli_error($conn));
-  }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -79,7 +88,7 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
     <!-- Customização CSS -->
     <link rel="stylesheet" href="styles.css">
     <!-- javascripts -->
-    <script src="js/scripts.js"></script>
+    
 
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
@@ -89,7 +98,7 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
     
 </head>
 
-<body  onload="setInterval('AtualizaBD()', 5000)">
+<body>
   <div class="container-wrapper">    
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
@@ -188,18 +197,18 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
                   <li class="breadcrumb-item">
                     <a href="pedidos.php">Dashboard Pedido</a>
                   </li>
-                  <li class="breadcrumb-item active">Pedidos</li>
+                  <li class="breadcrumb-item active">Vaso</li>
               </ol>
             </div>
           </div>   
           <div class="card">
                   <div class="card-header">
                     <!-- <i class="fas fa-table"></i> -->
-                    <h3>Pedidos</h3>
+                    <h3>Vaso</h3>
                   </div>
                
                   <div class="card-body">
-                      <form  method="GET" action="#" > 
+                      <form  method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>"> 
                         <div class="row">
                           <div  class="container-fluid">
                             <!-- <div class="card mb-3"> -->                    
@@ -207,40 +216,39 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
                                 <h3>Pesquisar</h3>
                               </div> -->
                             <div class="row">
-                              <table class="table table-bordered" id="dataTable"  cellspacing="0">
-                                <thead>
-                                  <tr>
-                                    <th>Mesa</th>
-                                    <th>Arguile</th>
-                                    <th>Bebida</th>
-                                    <th>Status</th>
-                                    <th>Ação</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <?php if(isset($pedidos)){ ?>
-                                    <?php if(mysqli_num_rows($pedidos) > 0): ?>
-                                      <?php while($uni = mysqli_fetch_assoc($pedidos)): ?> 
-                                        <?php echo '<tr><td>'. $uni["nomeMesa"] . '</td><td>' . $uni["sabor"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["descricao"] . '</td><td>' . '<button class="btn btn-primary" type="submit" id="preparar" class="floated" name="preparar" value='.$uni["mesa_id_mesa"].'>Preparar</button>' . ' ' . '<button class="btn btn-primary" type="submit" id="finalizar" class="floated" name="finalizar" value='.$uni["mesa_id_mesa"].'>Finalizar</button>' . '</td></tr>' ?>
+                              <div class="col-md-6">                  
+                                <label for="exampleFormControlInput1">Marca</label>
+                                <input type="text" class="form-control" id="marcaVaso" name="marcaVaso" value="<?php echo $vaso["marca"] ?>">
+                                <label for="exampleFormControlInput1">Tamanho</label>
+                                <input type="number" class="form-control" id="tamanhoVaso" step="0.01" min="0" name="tamanhoVaso" value="<?php echo $vaso["tamanho"] ?>">
+                                <label for="exampleFormControlInput1">Cor</label>
+                                <input type="text" class="form-control" name="corVaso" id="corVaso"  value="<?php echo $vaso["cor"] ?>">
+                                <label for="exampleFormControlInput1">Diâmetro</label>
+                                <input type="number" class="form-control" step="0.01" min="0" id="diametroVaso" name="diametroVaso" value="<?php echo $vaso["diametro"] ?>">
+                              </div>  
+                              <div class="col-md-6 ">                                
+                                <label for="exampleFormControlInput1">Material</label>
+                                <input type="text" class="form-control" id="materialVaso" name="materialVaso"  value="<?php echo $vaso["material"] ?>">
+                                <label for="exampleFormControlInput1">Preço</label>
+                                <input type="number" class="form-control" id="precoVaso" step="0.01" min="0" name="precoVaso" value="<?php echo $vaso["preco"] ?>">
+                                <label for="exampleFormControlInput1">Quantidade</label>
+                                <input type="number" class="form-control" id="quantidadeVaso" step="0.5" min="0" name="quantidadeVaso" value="<?php echo $vaso["quantidade"] ?>">
+                                <input type="hidden" class="form-control" id="id" name="id" value="<?php echo $vaso["id_vaso"] ?>">
+                                <br>  
+                                <button class="btn btn-primary" type="submit" id="confirmar" class="floated" name="confirmar">Alterar</button>
 
-                                      <?php endwhile; ?>
-                                    <?php else: ?>
-                                      Nenhuma busca realizada!
-                                    <?php endif; ?>
-                                  <?php } ?> 
-                                </tbody>
-                              </table>
-                                        
-                            <!-- FIM DIV ESCONDIDA -->
-                           
-                            </div> <!-- div row form -->
-                          </div> <!-- container fluid-->
-                        </div>  
+                              </div>
+                            </div>               
+                          </div>
+    
+
+                        </div> <!-- div row form -->
                       </form>
                     </div> <!-- Card body -->
                   </div>  <!-- card -->
             </div>  <!--content-wrapper -->
-          </div>   <!-- col-md-9 -->
+          </div>   <!-- col-->
+
         </div> <!--row-->  
       </div> <!-- ID WRAPPER-->
     </div>    <!-- container-wrapper -->
@@ -251,7 +259,7 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-
+    <script src="js/scripts.js"></script>
 </body>
 
 </html>

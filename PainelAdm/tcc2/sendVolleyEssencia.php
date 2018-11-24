@@ -1,7 +1,12 @@
 <?php 
-	require "../db_credentials.php"; 
+	require "db_credentials.php"; 
 
-	$conn = mysqli_connect($servername, $username, $password, $dbname, $port, $socket); 
+ $conn = mysqli_connect($servername, $username, $password, $dbname, $port, $socket);
+
+if (!$conn) {
+  die("Problemas ao conectar com o BD!<br>".
+       mysqli_connect_error());
+}
 
 	$sql = "SELECT * from essencia";
 
@@ -15,6 +20,7 @@
 	}
 
 	$array = json_encode($json_array);
+
 	echo '{"essencia":'.$array.'}'; 
 
 ?>

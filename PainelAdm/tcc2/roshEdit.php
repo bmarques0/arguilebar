@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
       $sql = "SELECT * from rosh where id_rosh= '$id'";
 
       if(!($rosh = mysqli_query($conn,$sql))){
-          die("Problemas para carregar os carvões do BD!<br>".
+          die("Problemas para carregar os Roshs do BD!<br>".
             mysqli_error($conn));
       }else{
         $rosh=mysqli_query($conn,$sql);
@@ -58,10 +58,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 
           $sql = "UPDATE rosh SET rosh.marca='$marcaRosh', rosh.cor='$corRosh', rosh.material='$materialRosh', rosh.tamanho='$tamanhoRosh', rosh.preco='$preçoRosh', rosh.quantidade='$quantidadeRosh' where id_rosh=$id";
           if(!mysqli_query($conn,$sql)){
-            die("Problemas para atualizar Carvao!<br>".
+            die("Problemas para atualizar Rosh!<br>".
                  mysqli_error($conn));
           }else{
-           echo "Atualizado com sucesso";
+           $msg = "Rosh alterado com sucesso!"; 
+           header('Location: /tcc2/rosh.php?msg='.$msg); 
           }
 
         }    
@@ -224,9 +225,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 <label for="exampleFormControlInput1">Tamanho</label>
                                 <input type="number" class="form-control" id="tamanhoRosh" name="tamanhoRosh" value="<?php echo $rosh["tamanho"] ?>">            
                                 <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoRosh" name="preçoRosh" value="<?php echo $rosh["preco"] ?>">
+                                <input type="number" class="form-control" id="preçoRosh" step="0.01" min="0" name="preçoRosh" value="<?php echo $rosh["preco"] ?>">
                                 <label for="exampleFormControlInput1">Quantidade</label>
-                                <input type="number" class="form-control" id="quandidadeRosh" name="quantidadeRosh" value="<?php echo $rosh["quantidade"] ?>">
+                                <input type="number" class="form-control" id="quandidadeRosh" step="0.5" name="quantidadeRosh" value="<?php echo $rosh["quantidade"] ?>">
 
                                 <input type="hidden" class="form-control" id="id" name="id" value="<?php echo $rosh["id_rosh"] ?>">
                                 <br>  

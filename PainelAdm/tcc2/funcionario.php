@@ -2,6 +2,7 @@
 require 'db_credentials.php';
 require 'authenticate.php';
 require 'lib/sanitize.php';
+require "lib/functionsPHP.php";
 
 if(!$login){
   header("Location: " . dirname($_SERVER['SCRIPT_NAME']) . "/login.php");}
@@ -11,6 +12,10 @@ if(!$login){
 if (!$conn) {
   die("Problemas ao conectar com o BD!<br>".
        mysqli_connect_error());
+}
+
+if(isset($_GET["msg"])){
+    echo "<script>alert('".$_GET['msg']."');</script>";
 }
 
 
@@ -44,9 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 
 
         if(empty($nomeFunc) and empty($sobrenomeFunc) and empty($cpfFunc) and empty($dataAdm) and empty($cargoFunc) and empty($salarioFunc) and empty($enderecoFunc) and empty($telefoneCelular) )  {
-          echo "Preencha todos os campos";
+          echo '<script>alert("Favor preencher todos os campos!"); </script>';
         }elseif(empty($nomeFunc)  or empty($sobrenomeFunc) or empty($cpfFunc) or empty($dataAdm) or empty($cargoFunc) or empty($salarioFunc) or empty($enderecoFunc) or empty($telefoneCelular) ) {
-          echo "Preencha um dos campos";
+          echo '<script>alert("Favor preencher todos os campos!"); </script>';
         }elseif(!empty($nomeFunc) and !empty($sobrenomeFunc) and !empty($cpfFunc) and !empty($dataAdm) and !empty($cargoFunc) and !empty($salarioFunc) and !empty($enderecoFunc) and !empty($telefoneCelular) ) {
 
 
@@ -56,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             die("Problemas para cadastrar Funcionário!<br>".
                  mysqli_error($conn));
           }else{
-            echo "Cadastrado com sucesso";
+            echo '<script>alert("Funcionário cadastrado com sucesso!"); </script>';
           }  
         }
       
@@ -72,9 +77,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
         $sobrenomeFunc = mysqli_real_escape_string($conn,$sobrenomeFunc);
 
         $cpfFunc = sanitize($_GET["cpfFunc"]);
+        $cpfFunc = soNumero($cpfFunc);
         $cpfFunc = mysqli_real_escape_string($conn,$cpfFunc);
 
         $dataAdm = sanitize($_GET["dataAdm"]);
+        $dataAdm = soNumero($dataAdm);
         $dataAdm = mysqli_real_escape_string($conn,$dataAdm);
 
         $cargoFunc = sanitize($_GET["cargoFunc"]);
@@ -267,15 +274,26 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 <input type="text" class="form-control" id="nomeFunc" name="nomeFunc" placeholder="Nome">
                                 <label for="exampleFormControlInput1">Sobrenome</label>
                                 <input type="text" class="form-control" id="sobrenomeFunc" name="sobrenomeFunc" placeholder="Sobrenome">
-                                <label for="exampleFormControlInput1">Material</label>
-                                <input type="text" class="form-control" id="materialRosh" name="materialRosh" placeholder="Material">
+                                <label for="exampleFormControlInput1">CPF</label>
+                                <input type="text" class="form-control" id="cpfFunc" name="cpfFunc" maxlength="11" placeholder="CPF">
+                                <script>
+                                  jQuery("#cpfFunc").mascaraCPF();
+                                </script>  
+                                <label for="exampleFormControlInput1">Endereço</label>
+                                <input type="text" class="form-control" id="enderecoFunc" name="enderecoFunc" placeholder="Endereço">
                               </div>  
                               <div class="col-md-6 ">
-                                <label for="exampleFormControlInput1">Tamanho</label>
-                                <input type="number" class="form-control" id="tamanhoRosh" name="tamanhoRosh" placeholder="Tamanho">                              <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoRosh" name="preçoRosh" placeholder="Preço">
-                                <label for="exampleFormControlInput1">Quantidade</label>
-                                <input type="number" class="form-control" id="quandidadeRosh" name="quantidadeRosh" placeholder="Quantidade">
+                                <label for="exampleFormControlInput1">Telefone Celular</label>
+                                <input type="number" class="form-control" id="telefoneCelular" maxlength="12" name="telefoneCelular" placeholder="(ddd) nnnnn-nnnn">
+                                <label for="exampleFormControlInput1">Data de Admissão</label>
+                                <input type="number" class="form-control" id="dataAdm" name="dataAdm" placeholder="Data de Admissão">                              
+                                <script>
+                                  jQuery("#data").mask("99/99/9999");
+                                </script>
+                                <label for="exampleFormControlInput1">Cargo</label>
+                                <input type="text" class="form-control" id="cargoFunc" name="cargoFunc" placeholder="Cargo">  
+                                <label for="exampleFormControlInput1">Salário</label>
+                                <input type="number" class="form-control" id="salarioFunc" step="0.01" min="0" name="salarioFunc" placeholder="Salário">
                                 <br>  
                                 <button class="btn btn-primary" type="submit" id="cadastrar" class="floated" name="cadastrar" value="cadastrar">Cadastrar</button>
                                 <button class="btn btn-primary" type="submit" id="pesquisar" class="floated" name="pesquisar" value="pesquisar">Pesquisar</button>  
@@ -289,21 +307,22 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                               <table class="table table-bordered" id="tableResultado" width="100%" cellspacing="0">
                                 <thead>
                                   <tr>
-                                    <th>ID Rosh</th>
-                                    <th>Marca</th>
-                                    <th>Cor</th>
-                                    <th>Material</th>
-                                    <th>Tamanho</th>
-                                    <th>Preço</th>
-                                    <th>Quantidade</th>
+                                    <th>Nome</th>
+                                    <th>Sobrenome</th>
+                                    <th>CPF</th>
+                                    <th>Endereço</th>
+                                    <th>Telefone Celular</th>
+                                    <th>Data Admissão</th>
+                                    <th>Cargo</th>
+                                    <th>Salário</th>
                                     <th>Ação</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <?php if(isset($roshs)){ ?>
-                                    <?php if(mysqli_num_rows($roshs) > 0): ?>
-                                      <?php while($uni = mysqli_fetch_assoc($roshs)): ?> 
-                                        <?php echo '<tr><td>'. $uni["id_rosh"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["cor"] . '</td><td>' . $uni["material"] . '</td><td>' . $uni["tamanho"] . '</td><td>'. $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a href=roshEdit.php?id='.$uni["id_rosh"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_rosh"].'>Excluir</button>' . '</td></tr>' ?>
+                                  <?php if(isset($funcionarios)){ ?>
+                                    <?php if(mysqli_num_rows($funcionarios) > 0): ?>
+                                      <?php while($uni = mysqli_fetch_assoc($funcionarios)): ?> 
+                                        <?php echo '<tr><td>'. $uni["nome_func"] . '</td><td>' . $uni["sobrenome"] . '</td><td>' . $uni["cpf_func"] . '</td><td>' . $uni["endereco"] . '</td><td>' . $uni["telefoneCelular"] . '</td><td>'. $uni["data_adm"] . '</td><td>' . $uni["cargo"] . '</td><td>' . 'R$ ' . $uni["salario"] .'</td><td>' .'<a class="btn btn-primary" href=funcionarioEdit.php?id='.$uni["id_funcionario"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_funcionario"].'>Excluir</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>

@@ -13,6 +13,9 @@ if (!$conn) {
        mysqli_connect_error());
 }
 
+if(isset($_GET["msg"])){
+    echo "<script>alert('".$_GET['msg']."');</script>";
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "GET"){  
 
@@ -30,9 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
 
 
         if(empty($marcaAluminio) and empty($preçoAluminio) and empty($quantidadeAluminio)){
-          echo "Preencha todos os campos";
+          echo '<script>alert("Favor preencher todos os campos!"); </script>'; 
         }elseif(empty($marcaAluminio)  or empty($preçoAluminio) or empty($quantidadeAluminio)) {
-          echo "Preencha um dos campos";
+          echo '<script>alert("Favor preencher todos os campos!"); </script>'; 
         }elseif(!empty($marcaAluminio) and !empty($preçoAluminio) and !empty($quantidadeAluminio)) {
 
 
@@ -41,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             die("Problemas para cadastrar o Alumínio!<br>".
                  mysqli_error($conn));
           }else{
-            echo "Cadastrado com sucesso";
+            echo '<script>alert("Alumínio cadastrado com sucesso!"); </script>'; 
           }  
         }
       
@@ -77,9 +80,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
       $num = $_GET["excluir"];
       $sql = "DELETE from aluminio WHERE id_aluminio='$num'";
         if(mysqli_query($conn,$sql)){
-          echo "Excluido com sucesso!";  
+          echo '<script>alert("Alumínio excluído com sucesso!"); </script>'; 
         }else{
-          echo "ERRO ao excluir registro";  
+          echo '<script>alert("Erro ao excluir Alumínio!"); </script>';
         }
 
     }
@@ -251,7 +254,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                               <table class="table table-bordered" id="tableResultado" width="100%" cellspacing="0">
                                 <thead>
                                   <tr>
-                                    <th>ID Alumínio</th>
                                     <th>Marca</th>
                                     <th>Preço</th>
                                     <th>Quantidade(Caixas)</th>
@@ -262,7 +264,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                   <?php if(isset($aluminios)){ ?>
                                     <?php if(mysqli_num_rows($aluminios) > 0): ?>
                                       <?php while($uni = mysqli_fetch_assoc($aluminios)): ?> 
-                                        <?php echo '<tr><td>'. $uni["id_aluminio"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a href=aluminioEdit.php?id='.$uni["id_aluminio"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_aluminio"].'>Excluir</button>' . '</td></tr>' ?>
+                                        <?php echo '<tr><td>' . $uni["marca"] . '</td><td>' . $uni["preco"] . '</td><td>' . $uni["quantidade"] .'</td><td>' . '<a  class="btn btn-primary" href=aluminioEdit.php?id='.$uni["id_aluminio"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_aluminio"].'>Excluir</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>

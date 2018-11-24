@@ -51,7 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
             die("Problemas para atualizar bebida!<br>".
                  mysqli_error($conn));
           }else{
-           echo "Atualizado com sucesso";
+           $msg = "Bebida alterada com sucesso!"; 
+           header('Location: /tcc2/bebida.php?msg='.$msg); 
           }
 
         }    
@@ -203,11 +204,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 <label for="exampleFormControlInput1">Marca</label>
                                 <input type="text" class="form-control" id="marcaBebida" name="marcaBebida" value="<?php echo $bebida["marca"] ?>">
                                 <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoBebida" name="preçoBebida" value="<?php echo $bebida["preco"] ?>">
+                                <input type="number" class="form-control" step="0.01" min="0" id="preçoBebida" name="preçoBebida" value="<?php echo $bebida["preco"] ?>">
                               </div>  
                               <div class="col-md-6 ">                                
                                 <label for="exampleFormControlInput1">Quantidade de Caixas</label>
-                                <input type="number" class="form-control" id="quantidadeBebida" name="quantidadeBebida" value="<?php echo $bebida["quantidade"] ?>">  
+                                <input type="number" step="0.5" min="0" class="form-control" id="quantidadeBebida" name="quantidadeBebida" value="<?php echo $bebida["quantidade"] ?>">  
                                 <input type="hidden" class="form-control" id="id" name="id" value="<?php echo $bebida["id_prodDiversos"] ?>">
                                 <br>  
                                 <button class="btn btn-primary" type="submit" id="confirmar" class="floated" name="confirmar">Alterar</button>
