@@ -56,12 +56,12 @@
 
     </LinearLayout>
 
+
     <Switch
         android:id="@+id/swichButtonId"
         android:layout_width="50dp"
         android:layout_height="30dp"
         android:layout_gravity="start"
-        android:onClick="onClickNumberButton"
         android:textOff="0"
         android:textOn="1/2"
         android:textSize="4dp"/>

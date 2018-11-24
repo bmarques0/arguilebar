@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.brunofelipe.arguilebar.R;
 
@@ -22,6 +25,7 @@ public class ListViewAdapter extends BaseAdapter {
     LayoutInflater inflater;
     List<ModelItem> modellist;
     ArrayList<ModelItem> arrayList;
+    Switch st;
 
 
     public ListViewAdapter(Context context, List<ModelItem> modellist) {
@@ -36,6 +40,7 @@ public class ListViewAdapter extends BaseAdapter {
     public class ViewHolder{
         TextView mTitleSessao, mDescSessao;
         ImageView mIconSessao;
+        Switch st;
     }
 
     @Override
@@ -64,7 +69,24 @@ public class ListViewAdapter extends BaseAdapter {
             holder.mTitleSessao = view.findViewById(R.id.mainTitle);
             holder.mDescSessao = view.findViewById(R.id.mainDesc);
             holder.mIconSessao = view.findViewById(R.id.mainIcon);
+            holder.st = view.findViewById(R.id.swichButtonId);
             view.setTag(holder);
+
+
+            st = view.findViewById(R.id.swichButtonId);
+
+            st.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(st.isChecked()) {
+                        Toast.makeText(mContext, "Checbox de  marcado!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mContext, "Checbox de desmarcado!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
 
         }
         else {
@@ -76,6 +98,8 @@ public class ListViewAdapter extends BaseAdapter {
 
         //set the result in imageview
         //holder.mIconSessao.setText(modellist.get(postition).getIcon());
+
+
 
 
         //Apresentar as telas de acordo com o click do usuário

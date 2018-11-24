@@ -83,7 +83,6 @@
         android:gravity="bottom">
 
 
-
         <Button
             android:id="@+id/selecionarPedidoId"
             android:layout_width="fill_parent"

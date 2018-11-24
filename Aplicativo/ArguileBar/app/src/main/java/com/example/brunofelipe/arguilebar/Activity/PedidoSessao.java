@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.support.v7.widget.SearchView;
@@ -42,7 +44,7 @@ import java.util.List;
 
 public class PedidoSessao extends AppCompatActivity {
 
-    private static final String URL_DATA="http://192.168.1.3:8081/tcc2/webservice/sendVolley.php";
+    private static final String URL_DATA="http://192.168.1.5:8081/tcc2/sendVolleyEssencia.php";
     private List<ModelItem> modelItems;
 
     ListView listViewSessao;
@@ -52,7 +54,7 @@ public class PedidoSessao extends AppCompatActivity {
     int[] icon;
     ArrayList<ModelItem> arrayList = new ArrayList<ModelItem>();
     ImageButton imageProduto;
-    Switch btnSwitch;
+    CheckBox ck;
     Button btnSelecionar;
 
 
@@ -63,13 +65,9 @@ public class PedidoSessao extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        title = new String[]{ "Zomo", "Adalya", "FML"};
-//        description = new String[]{"Descricao zomo", "Descricao Adalya", "Descricao FML"};
-//        icon = new int[]{R.drawable.essencia_zomo_timao, R.drawable.essencia_adalya_love66, R.drawable.essencia_fml_red};
-
         listViewSessao = findViewById(R.id.listViewSessao);
-
         modelItems = new ArrayList<>();
+
         loadListViewAdapter();
 
         //apresentando o resultado na listviewadpter
@@ -83,7 +81,7 @@ public class PedidoSessao extends AppCompatActivity {
 
     private void loadListViewAdapter() {
 
-        ProgressDialog progressDialog = new ProgressDialog(this);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Carregando dados..");
         progressDialog.show();
 
@@ -100,11 +98,12 @@ public class PedidoSessao extends AppCompatActivity {
                                 JSONObject o = array.getJSONObject(i);
                                 ModelItem item = new ModelItem(
 
-                                        //[{"id_essencia":"5","sabor":"Morango","marca":"Marca3","preco":"42","categoria":"Premium",
+                                        //["id_essencia":"5","sabor":"Morango","marca":"Marca3","preco":"42","categoria":"Premium",
                                         // "essenciaImg":null,"quantidade":"10"}
-                                        o.getString("sabor"),
                                         o.getString("marca"),
-                                        o.getString("essenciaImg")
+                                        o.getString("sabor"),
+ //                                       o.getString("preco"),
+                                        o.getString("descricao")
 
                                 );
 
@@ -113,6 +112,7 @@ public class PedidoSessao extends AppCompatActivity {
                             }
                             adapter = new ListViewAdapter(getApplicationContext(), modelItems);
                             listViewSessao.setAdapter(adapter);
+                            progressDialog.dismiss();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -126,8 +126,8 @@ public class PedidoSessao extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+                    RequestQueue requestQueue = Volley.newRequestQueue(this);
+                    requestQueue.add(stringRequest);
     }
 
 
@@ -205,27 +205,6 @@ public class PedidoSessao extends AppCompatActivity {
 
     }
 
-
-    public void onClickNumberButton (View view) {
-
-
-           btnSwitch = (Switch) findViewById(R.id.swichButtonId);
-           btnSwitch.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-                    String statusSwitch1;
-                    if (btnSwitch.isChecked())
-                        statusSwitch1 = btnSwitch.getTextOn().toString();
-                    else
-                        statusSwitch1 = btnSwitch.getTextOff().toString();
-                        Toast.makeText(getApplicationContext(), "Switch1 :" + statusSwitch1, Toast.LENGTH_LONG).show();
-                }
-            });
-
-
-            }
 
 
     public void selecionarPedido (View view) {
