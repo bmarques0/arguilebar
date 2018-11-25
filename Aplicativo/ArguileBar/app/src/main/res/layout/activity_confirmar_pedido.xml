@@ -15,29 +15,28 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="10dp"
         android:gravity="center"
-        android:text="Confirme os itens do seu pedido"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/textItensPedidoId"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/textTitleId"
-        android:layout_marginStart="10dp"
-        android:gravity="left"
-        android:paddingTop="20dp"
-        android:text="Itens do pedido: "
+        android:text="Confirme seu pedido!"
         android:textSize="20dp" />
 
+    <TextView
+        android:id="@+id/itensPedidoId"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="60dp"
+        android:gravity="left"
+        android:text="Itens do pedido:"
+        android:textSize="15dp"
+        android:textStyle="bold"/>
 
     <ListView
-        android:id="@+id/listViewConfirPedido"
-        android:layout_below="@id/idRadioGroup"
+        android:id="@+id/listViewSessao"
         android:layout_width="match_parent"
         android:layout_height="490dp"
-        android:layout_marginTop="120dp"
-        ></ListView>
+        android:layout_below="@id/idRadioGroup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"></ListView>
 
     <View
         android:id="@+id/divider2"
@@ -46,7 +45,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="75dp"
         android:background="?android:attr/listDivider" />
 
     <View
@@ -62,35 +61,24 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="120dp"
         android:gravity="bottom">
 
         <Button
-            android:id="@+id/voltarPedidoId"
-            android:layout_width="167dp"
+            android:id="@+id/btnVoltar"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="197dp"
-            android:layout_marginBottom="0dp"
-            android:text="Corrigir pedido"
-            android:background="#e9e9e9"
-            android:onClick="CorrigirPedido"/>
-
-        <Button
-            android:id="@+id/selecionarPedidoId"
-            android:layout_width="167dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="12dp"
-            android:onClick="ConfirmarPedido"
-            android:text="Confirmar pedido"
+            android:layout_alignParentTop="true"
             android:background="@color/colorPrimary"
-            android:textColor="#FFFF"
-            />
+            android:onClick="ConfirmarPedido"
+            android:text="Confirmar"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="#FFFFFF" />
 
     </RelativeLayout>
+
 
 </RelativeLayout>

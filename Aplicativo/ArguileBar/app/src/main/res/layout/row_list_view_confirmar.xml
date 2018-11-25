@@ -28,20 +28,20 @@
 
 
         <TextView
-            android:id="@+id/saborId"
+            android:id="@+id/marcaId"
             android:layout_width="188dp"
             android:layout_height="33dp"
             android:layout_marginBottom="7dp"
-            android:text="Nome-Produto"
+            android:text="Marca"
             android:textSize="25sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/descricaoId"
+            android:id="@+id/saborId"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="Descição-Produto"
+            android:text="Sabor"
             android:textSize="15sp" />
 
         <TextView
@@ -55,14 +55,14 @@
     </LinearLayout>
 
 
-    <Switch
-        android:id="@+id/swichButtonId"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:layout_gravity="start"
-        android:textOff="0"
-        android:textOn="1/2"
-        android:textSize="4dp"/>
+    <!--<Switch-->
+        <!--android:id="@+id/swichButtonId"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:layout_gravity="start"-->
+        <!--android:textOff="0"-->
+        <!--android:textOn="1/2"-->
+        <!--android:textSize="4dp"/>-->
 
     <ListView
         android:id="@+id/listViewSessao"

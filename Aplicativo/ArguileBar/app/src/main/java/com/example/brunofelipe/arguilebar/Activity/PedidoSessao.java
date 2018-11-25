@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -39,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,20 +51,30 @@ public class PedidoSessao extends AppCompatActivity {
     private List<ModelItem> modelItems;
 
     ListView listViewSessao;
-    ListViewAdapter adapter;
-    String[] title;
-    String[] description;
-    int[] icon;
+    ModelItem modelItem;
     ArrayList<ModelItem> arrayList = new ArrayList<ModelItem>();
+    ArrayList<ModelItem> modellistIntent;
+    ListViewAdapter adapter;
     ImageButton imageProduto;
-    CheckBox ck;
     Button btnSelecionar;
-
+    int id;
+    RadioButton radiobutMeioaMeio;
+    RadioButton radiobutInteiro;
+    RadioGroup radioGroup;
+    Switch st;
+    int idEssencia;
+    String sabor, marca, preco;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido_sessao);
+
+
+        radioGroup = findViewById(R.id.idRadioGroup);
+        radiobutMeioaMeio = findViewById(R.id.radiobutIdMeio);
+        radiobutInteiro = findViewById(R.id.radiobuttonIdInteiro);
+        btnSelecionar =  findViewById(R.id.selecionarPedidoId);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -76,6 +89,18 @@ public class PedidoSessao extends AppCompatActivity {
         //vincular o adapter com a lista
         listViewSessao.setAdapter(adapter);
 
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if(radiobutMeioaMeio.isChecked()){
+                    Toast.makeText(getApplicationContext(), "Selecione até 2 essência!", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Selecione somente 1 essência", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
@@ -97,18 +122,17 @@ public class PedidoSessao extends AppCompatActivity {
                             for(int i = 0; i<array.length(); i++){
                                 JSONObject o = array.getJSONObject(i);
                                 ModelItem item = new ModelItem(
-
-                                        //["id_essencia":"5","sabor":"Morango","marca":"Marca3","preco":"42","categoria":"Premium",
-                                        // "essenciaImg":null,"quantidade":"10"}
-                                        o.getString("marca"),
-                                        o.getString("sabor"),
- //                                       o.getString("preco"),
-                                        o.getString("descricao")
+                                o.getInt("id_essencia"),
+                                o.getString("sabor"),
+                                o.getString("marca"),
+                                o.getString("preco"),
+                                o.getString("categoria"),
+                                o.getString("quantidade"),
+                                o.getString("essenciaImg"),
+                                o.getString("descricao")
 
                                 );
-
                                 modelItems.add(item);
-
                             }
                             adapter = new ListViewAdapter(getApplicationContext(), modelItems);
                             listViewSessao.setAdapter(adapter);
@@ -129,8 +153,6 @@ public class PedidoSessao extends AppCompatActivity {
                     RequestQueue requestQueue = Volley.newRequestQueue(this);
                     requestQueue.add(stringRequest);
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -172,25 +194,7 @@ public class PedidoSessao extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void RadioCheck (View view) {
-
-        RadioButton radioMeio = (RadioButton)findViewById(R.id.radiobutIdMeio);
-        RadioButton radioInteiro = ((RadioButton)findViewById(R.id.radiobuttonIdInteiro));
-
-        final RadioGroup group = (RadioGroup) findViewById(R.id.idRadioGroup);
-        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton button = (RadioButton) group.findViewById(checkedId);
-                String resposta = button.getText().toString();
-            }
-        });
-
-    }
-
     public void DetalheProduto (View view) {
-
-
         //onClick foto produto para detalhes do produto
         imageProduto = (ImageButton) findViewById(R.id.mainIcon);
         imageProduto.setOnClickListener(new View.OnClickListener() {
@@ -202,68 +206,77 @@ public class PedidoSessao extends AppCompatActivity {
             }
 
         });
-
     }
-
-
 
     public void selecionarPedido (View view) {
 
-
-        btnSelecionar = (Button) findViewById(R.id.selecionarPedidoId);
         btnSelecionar.setOnClickListener(new View.OnClickListener() {
-
-
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(PedidoSessao.this, DetalhesProduto.class);
-                startActivity(it);
+                int defaultid=0;
+                String defaultSabor = null, defaultMarca=null, defaultPreco=null;
 
                 //Montar o objeto e transferir de intent
 
+                SharedPreferences prefs;
+                prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                int id = prefs.getInt("idEssencia", defaultid);
+                String sabor = prefs.getString("sabor", defaultSabor);
+                String marca = prefs.getString("marca", defaultMarca);
+                String preco = prefs.getString("preco", defaultPreco);
+                ModelItem item = new ModelItem(id, sabor, marca, preco);
+                Intent intent = new Intent(getApplicationContext(), ConfirmarPedido.class);
+                intent.putExtra("Essencia", (Serializable) item);
+                //intent.putExtra("idEssencia",id);
 
+                //intent.putExtra("sabor",sabor);
+                //intent.putExtra("marca",marca);
+                //intent.putExtra("preco",preco);
+
+                startActivity(intent);
+
+                //modelItems = new ArrayList();
+                //modelItems.add(item);
+                //Intent intent = new Intent(getApplicationContext(), ConfirmarPedido.class);
+                //intent.putExtra("arrayEssencia", (Serializable) modelItems);
+
+                //startActivity(intent);
 
                 //Mensagem de confirmação
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(PedidoSessao.this);
-
-                builder.setTitle("Fazer novo pedido");
-                builder.setMessage("Deseja Solicitar algo para beber?");
-
-                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        // Salvar o objeto selecionado
-                        // Transferir para a tela de bebidas
-                        Intent it = new Intent(PedidoSessao.this, ConfirmarPedido.class);
-                        startActivity(it);
-
-                        dialog.dismiss();
-                    }
-                });
-
-                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        // Salvar o objeto selecionado
-                        // Transferir para a tela de Confirmar pedido
-                        Intent it = new Intent(PedidoSessao.this, ConfirmarPedido.class);
-                        startActivity(it);
-                        dialog.dismiss();
-                    }
-                });
-
-                AlertDialog alert = builder.create();
-                alert.show();
+//                AlertDialog.Builder builder = new AlertDialog.Builder(PedidoSessao.this);
+//                builder.setTitle("Fazer novo pedido");
+//                builder.setMessage("Deseja Solicitar algo para beber?");
+//
+//                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+//
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        // Salvar o objeto selecionado
+//                        // Transferir para a tela de bebidas
+//                        Intent it = new Intent(PedidoSessao.this, ConfirmarPedido.class);
+//                        startActivity(it);
+//
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        // Salvar o objeto selecionado
+//                        // Transferir para a tela de Confirmar pedido
+//                        Intent it = new Intent(PedidoSessao.this, ConfirmarPedido.class);
+//                        startActivity(it);
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//                AlertDialog alert = builder.create();
+//                alert.show();
             }
-
         });
-
-
-
 
     }
 }

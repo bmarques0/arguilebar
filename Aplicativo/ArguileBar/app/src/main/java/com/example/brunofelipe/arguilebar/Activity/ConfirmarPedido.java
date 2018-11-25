@@ -18,6 +18,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.brunofelipe.arguilebar.R;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ConfirmarPedido extends AppCompatActivity {
@@ -25,7 +27,14 @@ public class ConfirmarPedido extends AppCompatActivity {
     Button BtnConfirmarPedido;
     Button BtnVoltar;
     ListView listViewConfirPedido;
+    ModelItem modelItem;
+    int idEssencia;
+    String sabor, marca, preco;
     private static final String URL_POST="";
+    ListView listViewSessao;
+    ListViewAdapterConfPedido adapter;
+    ArrayList<ModelItem> modellist;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +43,40 @@ public class ConfirmarPedido extends AppCompatActivity {
 
         BtnConfirmarPedido = (Button)findViewById(R.id.selecionarPedidoId);
         BtnVoltar = (Button)findViewById(R.id.selecionarPedidoId);
-        listViewConfirPedido = (ListView)findViewById(R.id.listViewConfirPedido);
+        listViewConfirPedido = (ListView)findViewById(R.id.listViewSessao);
+
+        ArrayList modelist = new ArrayList();
+        Intent intent = getIntent();
+        ModelItem item = (ModelItem) intent.getSerializableExtra("Essencia");
+
+        modelist = new ArrayList();
+
+        modelist.add(item);
+
+        //modellist =  (ArrayList<ModelItem>) intent.getSerializableExtra("arrayEssencia");
+        //intent.getSerializableExtra("idEssencia");
 
 
-        ConfirmarPedido();
+        //modelItem = modellist[0];
+        //criar a lista inteira de acordo com o row criada
+        //for (int i = 0; i <=modellist.size(); i++) {
+
+
+        //    sabor = modelItem.getSabor();
+        //    marca = modelItem.getMarca();
+        //    preco = modelItem.getPreco();
+
+
+            //ModelItem model = new ModelItem(idEssencia[i], sabor[i], marca[i], preco[i]);
+
+            //vicular todas as strings no arr
+            //arrayList.add(model);
+
+        //apresentando o resultado na listviewadpter
+        adapter = new ListViewAdapterConfPedido(this, modelist);
+
+        //vincular o adapter com a lista
+        listViewConfirPedido.setAdapter(adapter);
 
     }
 
@@ -57,7 +96,6 @@ public class ConfirmarPedido extends AppCompatActivity {
     }
 
     public void ConfirmarPedido () {
-
 
         BtnConfirmarPedido = (Button) findViewById(R.id.selecionarPedidoId);
         BtnConfirmarPedido.setOnClickListener(new View.OnClickListener() {
@@ -92,13 +130,3 @@ public class ConfirmarPedido extends AppCompatActivity {
     }
 
 }
-
-
-//
-//                //Mensagem de sucesso
-//                Toast.makeText(getApplicationContext(),"Pedido Realizado com sucesso! ",Toast.LENGTH_LONG).show();
-//
-//
-//                //Retornar para a página inicial
-//                Intent it = new Intent(ConfirmarPedido.this, MainActivity.class);
-//                startActivity(it);

@@ -34,8 +34,7 @@
             android:layout_height="30dp"
             android:layout_below="@id/textTitleId"
             android:text="Rosh Meio a Meio?"
-            android:checked="true"
-            android:onClick="RadioCheck"/>
+            android:checked="true"/>
 
         <android.support.v7.widget.AppCompatRadioButton
             android:id="@+id/radiobuttonIdInteiro"
@@ -44,8 +43,7 @@
             android:layout_marginLeft="20dp"
             android:layout_height="30dp"
             android:layout_below="@id/radiobutIdMeio"
-            android:text="Só uma essência"
-            android:onClick="RadioCheck"/>
+            android:text="Só uma essência"/>
     </RadioGroup>
     <ListView
         android:id="@+id/listViewSessao"

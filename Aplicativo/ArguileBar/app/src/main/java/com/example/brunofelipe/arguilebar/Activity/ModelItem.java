@@ -1,27 +1,99 @@
 package com.example.brunofelipe.arguilebar.Activity;
 
-public class ModelItem {
+import java.io.Serializable;
 
-    String title;
-    String desc;
+public class ModelItem implements Serializable {
+
+    int idEssencia;
+    String sabor;
+    String marca;
+    String preco;
+    String categoria;
+    String quantidade;
     String imageUrl;
+    String descricao;
 
-    //construtor
-    public ModelItem (String title, String desc, String imageUrl){
-        this.title=title;
-        this.desc=desc;
-        this.imageUrl=imageUrl;
+    public ModelItem(int idEssencia, String sabor, String marca, String preco, String categoria, String quantidade, String imageUrl, String descricao) {
+        this.idEssencia = idEssencia;
+        this.sabor = sabor;
+        this.marca = marca;
+        this.preco = preco;
+        this.categoria = categoria;
+        this.quantidade = quantidade;
+        this.imageUrl = imageUrl;
+        this.descricao = descricao;
     }
 
-    public String getTitle() {
-        return title;
+    public ModelItem(int idEssencia, String sabor, String marca, String preco) {
+        this.idEssencia = idEssencia;
+        this.sabor = sabor;
+        this.marca = marca;
+        this.preco = preco;
     }
 
-    public String getDesc() {
-        return desc;
+    public ModelItem() {}
+
+    public int getIdEssencia() {
+        return idEssencia;
     }
 
-    public String getIcon() {
+    public void setIdEssencia(int idEssencia) {
+        this.idEssencia = idEssencia;
+    }
+
+    public String getSabor() {
+        return sabor;
+    }
+
+    public void setSabor(String sabor) {
+        this.sabor = sabor;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getPreco() {
+        return preco;
+    }
+
+    public void setPreco(String preco) {
+        this.preco = preco;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(String quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }

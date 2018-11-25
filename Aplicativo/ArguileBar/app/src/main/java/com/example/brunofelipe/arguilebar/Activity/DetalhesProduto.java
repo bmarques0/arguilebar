@@ -12,11 +12,16 @@ import com.example.brunofelipe.arguilebar.R;
 public class DetalhesProduto extends AppCompatActivity {
 
     Button botaoVoltar;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_produto);
+
+//        Intent intent = getIntent();
+//        essenciaSelecionada = (EssenciaSelecionada) intent.getSerializableExtra("essencia");
+//        id = essenciaSelecionada.getId();
     }
 
     public void VoltarPedido(View view) {
@@ -29,6 +34,9 @@ public class DetalhesProduto extends AppCompatActivity {
             public void onClick(View view) {
                 Intent it = new Intent(DetalhesProduto.this, PedidoSessao.class);
                 startActivity(it);
+
+
+
             }
 
         });

@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.example.brunofelipe.arguilebar.R;
 
@@ -16,7 +15,7 @@ public class FazerPedidoCateg extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fazer_pedido_categ);
+        setContentView(R.layout.activity_fazer_pedido_categ);
 
 
     }
