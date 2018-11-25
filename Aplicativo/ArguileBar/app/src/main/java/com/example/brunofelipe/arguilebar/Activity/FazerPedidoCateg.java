@@ -17,7 +17,6 @@ public class FazerPedidoCateg extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fazer_pedido_categ);
 
-
     }
 
     public void fazerPedido (View view) {

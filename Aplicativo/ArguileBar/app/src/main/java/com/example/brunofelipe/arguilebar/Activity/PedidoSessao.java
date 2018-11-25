@@ -71,6 +71,7 @@ public class PedidoSessao extends AppCompatActivity {
         setContentView(R.layout.activity_pedido_sessao);
 
 
+        imageProduto = findViewById(R.id.mainIcon);
         radioGroup = findViewById(R.id.idRadioGroup);
         radiobutMeioaMeio = findViewById(R.id.radiobutIdMeio);
         radiobutInteiro = findViewById(R.id.radiobuttonIdInteiro);
@@ -94,7 +95,7 @@ public class PedidoSessao extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 if(radiobutMeioaMeio.isChecked()){
-                    Toast.makeText(getApplicationContext(), "Selecione até 2 essência!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Selecione até 2 essência!", Toast.LENGTH_SHORT).show();
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Selecione somente 1 essência", Toast.LENGTH_SHORT).show();
@@ -203,6 +204,22 @@ public class PedidoSessao extends AppCompatActivity {
             public void onClick(View view) {
                 Intent it = new Intent(PedidoSessao.this, DetalhesProduto.class);
                 startActivity(it);
+
+                //intent.putExtra("idEssencia",id);
+
+                //intent.putExtra("sabor",sabor);
+                //intent.putExtra("marca",marca);
+                //intent.putExtra("preco",preco);
+
+                //startActivity(intent);
+
+                //modelItems = new ArrayList();
+                //modelItems.add(item);
+                //Intent intent = new Intent(getApplicationContext(), ConfirmarPedido.class);
+                //intent.putExtra("arrayEssencia", (Serializable) modelItems);
+
+
+
             }
 
         });

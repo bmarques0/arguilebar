@@ -14,7 +14,6 @@
         android:src="@drawable/home7"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:onClick="DetalheProduto"
         android:scaleType="fitCenter"
         android:background="@color/cardview_light_background"/>
 
@@ -53,16 +52,6 @@
             android:layout_marginTop="10dp"
             android:textSize="15sp" />
     </LinearLayout>
-
-
-    <!--<Switch-->
-        <!--android:id="@+id/swichButtonId"-->
-        <!--android:layout_width="50dp"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:layout_gravity="start"-->
-        <!--android:textOff="0"-->
-        <!--android:textOn="1/2"-->
-        <!--android:textSize="4dp"/>-->
 
     <ListView
         android:id="@+id/listViewSessao"

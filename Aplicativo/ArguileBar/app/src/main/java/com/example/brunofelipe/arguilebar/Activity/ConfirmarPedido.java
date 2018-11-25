@@ -1,8 +1,11 @@
 package com.example.brunofelipe.arguilebar.Activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -16,61 +19,55 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.brunofelipe.arguilebar.R;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ConfirmarPedido extends AppCompatActivity {
 
+    String server_url = "http://192.168.1.5:8081/tcc2/requestVolley.php";
+
+    private RequestQueue mQueue;
+
     Button BtnConfirmarPedido;
     Button BtnVoltar;
     ListView listViewConfirPedido;
     ModelItem modelItem;
-    int idEssencia;
-    String sabor, marca, preco;
-    private static final String URL_POST="";
     ListView listViewSessao;
     ListViewAdapterConfPedido adapter;
-    ArrayList<ModelItem> modellist;
+    //ArrayList<ModelItem> modellist;
+    ModelItem item;
+    List<ModelItem> modelItemArrayJson;
+    String newModelItemArrayJson;
+    int idEssencia;
+    String sabor, marca, preco, qtdade;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmar_pedido);
 
-        BtnConfirmarPedido = (Button)findViewById(R.id.selecionarPedidoId);
-        BtnVoltar = (Button)findViewById(R.id.selecionarPedidoId);
+        BtnConfirmarPedido = (Button)findViewById(R.id.btnSelecionar) ;
         listViewConfirPedido = (ListView)findViewById(R.id.listViewSessao);
 
         ArrayList modelist = new ArrayList();
         Intent intent = getIntent();
-        ModelItem item = (ModelItem) intent.getSerializableExtra("Essencia");
+        item = (ModelItem) intent.getSerializableExtra("Essencia");
+
 
         modelist = new ArrayList();
 
         modelist.add(item);
-
-        //modellist =  (ArrayList<ModelItem>) intent.getSerializableExtra("arrayEssencia");
-        //intent.getSerializableExtra("idEssencia");
-
-
-        //modelItem = modellist[0];
-        //criar a lista inteira de acordo com o row criada
-        //for (int i = 0; i <=modellist.size(); i++) {
-
-
-        //    sabor = modelItem.getSabor();
-        //    marca = modelItem.getMarca();
-        //    preco = modelItem.getPreco();
-
-
-            //ModelItem model = new ModelItem(idEssencia[i], sabor[i], marca[i], preco[i]);
-
-            //vicular todas as strings no arr
-            //arrayList.add(model);
 
         //apresentando o resultado na listviewadpter
         adapter = new ListViewAdapterConfPedido(this, modelist);
@@ -80,53 +77,71 @@ public class ConfirmarPedido extends AppCompatActivity {
 
     }
 
-    public void CorrigirPedido(View view) {
 
-        //onClick foto produto para detalhes do produto
-        BtnVoltar = (Button) findViewById(R.id.btnVoltar);
-        BtnVoltar.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent it = new Intent(ConfirmarPedido.this, PedidoSessao.class);
-                startActivity(it);
-            }
-
-        });
-    }
-
-    public void ConfirmarPedido () {
-
-        BtnConfirmarPedido = (Button) findViewById(R.id.selecionarPedidoId);
+    public void ConfirmarPedido (View view)
+    {
         BtnConfirmarPedido.setOnClickListener(new View.OnClickListener() {
-
-
             @Override
             public void onClick(View view) {
 
-                //Enviar Json para Painel Adm
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POST, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                modelItemArrayJson = new ArrayList<ModelItem>();
 
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                //popular o arrayList
+                idEssencia = item.getIdEssencia();
+                sabor = item.getSabor();
+                marca = item.getMarca();
+                preco = item.getPreco();
+                qtdade = item.getQuantidade();
 
+                modelItemArrayJson.add(item);
+
+                Gson gson = new Gson();
+
+                newModelItemArrayJson = gson.toJson(modelItemArrayJson);
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                                final String result = response.toString();
+                                Log.d("response", "result: " + result);
+
+                            }
+                        },
+
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                error.printStackTrace();
+                                error.getMessage();
+
+                            }
+                        }
+                ) {
+
+                    @Override
+                    public Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> param = new HashMap<String, String>();
+                        param.put("array", newModelItemArrayJson);
+                        return param;
                     }
-                }){
-//                    @Override
-//                    protected Map<Array> getParams() throws AuthFailureError {
-//                        return (Map<Array>) super.getParams();
-//                    }
+
                 };
 
-                RequestQueue requestQueue = Volley.newRequestQueue(ConfirmarPedido.this);
-                requestQueue.add(stringRequest);
+                Vconnection.getInstance(getBaseContext()).addRequestQue(stringRequest);
+
+                Toast.makeText(getApplicationContext(), "Pedido Realizado com sucesso!", Toast.LENGTH_LONG).show();
+                Intent it = new Intent(ConfirmarPedido.this, MainActivity.class);
+                startActivity(it);
+
 
             }
         });
-    }
-
+        }
 }
+
+
+
+
+
