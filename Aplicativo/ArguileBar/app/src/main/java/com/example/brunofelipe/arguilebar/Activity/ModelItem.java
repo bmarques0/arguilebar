@@ -13,6 +13,11 @@ public class ModelItem implements Serializable {
     String imageUrl;
     String descricao;
 
+    public ModelItem(String marca, String preco){
+        this.marca = marca;
+        this.preco = preco;
+    }
+
     public ModelItem(int idEssencia, String sabor, String marca, String preco, String categoria, String quantidade, String imageUrl, String descricao) {
         this.idEssencia = idEssencia;
         this.sabor = sabor;

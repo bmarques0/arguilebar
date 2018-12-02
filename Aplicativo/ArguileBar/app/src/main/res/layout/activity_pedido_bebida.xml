@@ -9,57 +9,52 @@
     >
 
     <TextView
-        android:id="@+id/textTitleId"
+        android:id="@+id/textTitleIdBebida"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
         android:layout_marginStart="10dp"
         android:gravity="center"
-        android:text="Confirme seu pedido!"
+        android:text="Escolha a bebida que desejar"
         android:textSize="20dp" />
 
-    <TextView
-        android:id="@+id/itensPedidoId"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="60dp"
-        android:gravity="left"
-        android:text="Itens do pedido:"
-        android:textSize="15dp"
-        android:textStyle="bold"/>
 
     <ListView
-        android:id="@+id/listViewSessao"
-        android:layout_width="351dp"
-        android:layout_height="380dp"
+        android:id="@+id/listViewBebida"
         android:layout_below="@id/idRadioGroup"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"></ListView>
+        android:layout_width="match_parent"
+        android:layout_height="490dp"
+        android:layout_marginTop="100dp"
+        ></ListView>
 
+    <View
+        android:id="@+id/divider2Bebida"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="60dp"
+        android:background="?android:attr/listDivider" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="0dp"
         android:gravity="bottom">
 
         <Button
-            android:id="@+id/btnSelecionar"
+            android:id="@+id/selecionarPedidoIdBebida"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:onClick="ConfirmarPedido"
-            android:text="Confirmar"
+            android:onClick="selecionarPedidoBebida"
+            android:text="Selecionar"
             android:background="@color/colorPrimary"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
             android:textColor="#FFFFFF" />
 
     </RelativeLayout>
-
 
 </RelativeLayout>

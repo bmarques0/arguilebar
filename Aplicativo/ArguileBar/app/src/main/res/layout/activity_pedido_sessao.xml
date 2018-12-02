@@ -85,7 +85,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="selecionarPedido"
-            android:text="Selecionar" />
+            android:text="Selecionar"
+            android:background="@color/colorPrimary"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="#FFFFFF" />
 
     </RelativeLayout>
 

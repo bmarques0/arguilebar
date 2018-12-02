@@ -47,15 +47,19 @@ import java.util.List;
 
 public class PedidoSessao extends AppCompatActivity {
 
-    private static final String URL_DATA="http://192.168.1.5:8081/tcc2/sendVolleyEssencia.php";
+    private static final String URL_DATA="http://192.168.0.104:8081/tcc2/sendVolleyEssencia.php";
+    //private static final String URL_DATA = "http://192.168.64.2/tcc2/json.php";
     private List<ModelItem> modelItems;
 
     ListView listViewSessao;
     ModelItem modelItem;
+    ModelItem item2;
+    ModelItem item;
     ArrayList<ModelItem> arrayList = new ArrayList<ModelItem>();
     ArrayList<ModelItem> modellistIntent;
     ListViewAdapter adapter;
     ImageButton imageProduto;
+
     Button btnSelecionar;
     int id;
     RadioButton radiobutMeioaMeio;
@@ -64,9 +68,13 @@ public class PedidoSessao extends AppCompatActivity {
     Switch st;
     int idEssencia;
     String sabor, marca, preco;
+    Intent itEssenciaBebida;
+    SharedPreferences prefs;
+    int countEssencia;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido_sessao);
 
@@ -105,7 +113,8 @@ public class PedidoSessao extends AppCompatActivity {
 
     }
 
-    private void loadListViewAdapter() {
+    private void loadListViewAdapter()
+    {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Carregando dados..");
@@ -156,7 +165,8 @@ public class PedidoSessao extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         getMenuInflater().inflate(R.menu.menu, menu);
 
         MenuItem myActionMenuItem = menu.findItem(R.id.action_search);
@@ -184,10 +194,12 @@ public class PedidoSessao extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         int id = item.getItemId();
 
-        if(id == R.id.action_settings) {
+        if(id == R.id.action_settings)
+        {
             //
             return true;
         }
@@ -195,7 +207,8 @@ public class PedidoSessao extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void DetalheProduto (View view) {
+    public void DetalheProduto (View view)
+    {
         //onClick foto produto para detalhes do produto
         imageProduto = (ImageButton) findViewById(R.id.mainIcon);
         imageProduto.setOnClickListener(new View.OnClickListener() {
@@ -218,82 +231,105 @@ public class PedidoSessao extends AppCompatActivity {
                 //Intent intent = new Intent(getApplicationContext(), ConfirmarPedido.class);
                 //intent.putExtra("arrayEssencia", (Serializable) modelItems);
 
-
-
             }
 
         });
     }
 
-    public void selecionarPedido (View view) {
+    public void selecionarPedido (View view)
+    {
 
-        btnSelecionar.setOnClickListener(new View.OnClickListener() {
+        btnSelecionar.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-                int defaultid=0;
-                String defaultSabor = null, defaultMarca=null, defaultPreco=null;
+            public void onClick(View view)
+            {
+                int defaultid = 0, defaultCount=0;
+                String defaultSabor = null, defaultMarca = null, defaultPreco = null;
 
                 //Montar o objeto e transferir de intent
 
-                SharedPreferences prefs;
                 prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                int id = prefs.getInt("idEssencia", defaultid);
-                String sabor = prefs.getString("sabor", defaultSabor);
-                String marca = prefs.getString("marca", defaultMarca);
-                String preco = prefs.getString("preco", defaultPreco);
-                ModelItem item = new ModelItem(id, sabor, marca, preco);
-                Intent intent = new Intent(getApplicationContext(), ConfirmarPedido.class);
-                intent.putExtra("Essencia", (Serializable) item);
-                //intent.putExtra("idEssencia",id);
+                countEssencia = prefs.getInt("countEssencia", defaultCount);
+                itEssenciaBebida = new Intent(PedidoSessao.this, ConfirmarPedido.class);
 
-                //intent.putExtra("sabor",sabor);
-                //intent.putExtra("marca",marca);
-                //intent.putExtra("preco",preco);
+                if(countEssencia == 1) {
+                    int id = prefs.getInt("idEssencia1", defaultid);
+                    String sabor = prefs.getString("sabor1", defaultSabor);
+                    String marca = prefs.getString("marca1", defaultMarca);
+                    String preco = prefs.getString("preco1", defaultPreco);
+                    item = new ModelItem(id, sabor, marca, preco);
 
-                startActivity(intent);
+                    itEssenciaBebida.putExtra("Essencia", item);
+                    itEssenciaBebida.putExtra("countEssencia", countEssencia);
+                }
+                if(countEssencia == 2) {
 
-                //modelItems = new ArrayList();
-                //modelItems.add(item);
-                //Intent intent = new Intent(getApplicationContext(), ConfirmarPedido.class);
-                //intent.putExtra("arrayEssencia", (Serializable) modelItems);
+                    int id = prefs.getInt("idEssencia1", defaultid);
+                    String sabor = prefs.getString("sabor1", defaultSabor);
+                    String marca = prefs.getString("marca1", defaultMarca);
+                    String preco = prefs.getString("preco1", defaultPreco);
+                    item = new ModelItem(id, sabor, marca, preco);
 
-                //startActivity(intent);
+                        int id2 = prefs.getInt("idEssencia2", defaultid);
+                        String sabor2 = prefs.getString("sabor2", defaultSabor);
+                        String marca2 = prefs.getString("marca2", defaultMarca);
+                        String preco2 = prefs.getString("preco2", defaultPreco);
+                        item2 = new ModelItem(id2, sabor2, marca2, preco2);
 
-                //Mensagem de confirmação
-//                AlertDialog.Builder builder = new AlertDialog.Builder(PedidoSessao.this);
-//                builder.setTitle("Fazer novo pedido");
-//                builder.setMessage("Deseja Solicitar algo para beber?");
-//
-//                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-//
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                        // Salvar o objeto selecionado
-//                        // Transferir para a tela de bebidas
-//                        Intent it = new Intent(PedidoSessao.this, ConfirmarPedido.class);
-//                        startActivity(it);
-//
-//                        dialog.dismiss();
-//                    }
-//                });
-//
-//                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                        // Salvar o objeto selecionado
-//                        // Transferir para a tela de Confirmar pedido
-//                        Intent it = new Intent(PedidoSessao.this, ConfirmarPedido.class);
-//                        startActivity(it);
-//                        dialog.dismiss();
-//                    }
-//                });
-//
-//                AlertDialog alert = builder.create();
-//                alert.show();
+                    itEssenciaBebida.putExtra("Essencia", item);
+                    itEssenciaBebida.putExtra("Essencia2", item2);
+                    itEssenciaBebida.putExtra("countEssencia", countEssencia);
+
+                }
+
+
+
+                MensagemConfirmacao(view);
             }
-        });
 
+        });
     }
+
+    public void MensagemConfirmacao (View view)
+    {
+                //Mensagem de confirmação
+                AlertDialog.Builder builder = new AlertDialog.Builder(PedidoSessao.this);
+                builder.setTitle("Fazer novo pedido");
+                builder.setMessage("Deseja Solicitar algo para beber?");
+
+
+                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                        // Salvar o objeto selecionado
+                        // Transferir para a tela de bebidas
+                        Intent itEssenciaBebida = new Intent(PedidoSessao.this, PedidoBebida.class);
+                        itEssenciaBebida.putExtra("Essencia", item);
+                        itEssenciaBebida.putExtra("Essencia2", item2);
+                        itEssenciaBebida.putExtra("countEssencia", countEssencia);
+                        startActivity(itEssenciaBebida);
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        // Salvar o objeto selecionado
+                        // Transferir para a tela de Confirmar pedido
+                        startActivity(itEssenciaBebida);
+                        dialog.dismiss();
+
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+    }
+
 }

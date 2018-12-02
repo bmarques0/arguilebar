@@ -26,6 +26,9 @@
             android:name=".Activity.PedidoSessao"
             android:parentActivityName=".Activity.FazerPedidoCateg" />
         <activity
+            android:name=".Activity.PedidoBebida"
+            android:parentActivityName=".Activity.FazerPedidoCateg" />
+        <activity
             android:name=".Activity.DetalhesProduto"
             android:parentActivityName=".Activity.PedidoSessao" />
         <activity android:name=".Activity.ConfirmarPedido"></activity>

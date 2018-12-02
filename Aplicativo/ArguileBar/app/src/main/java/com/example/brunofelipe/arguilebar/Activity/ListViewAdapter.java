@@ -36,6 +36,7 @@ public class ListViewAdapter extends BaseAdapter {
     String preco;
     ArrayList<ModelItem> modellistSeleciona = new ArrayList<>();
     ModelItem item;
+    List<ModelItem> listaModellist = new ArrayList<ModelItem>();
 
 
     public ListViewAdapter(Context context, List<ModelItem> modellist) {
@@ -98,17 +99,41 @@ public class ListViewAdapter extends BaseAdapter {
                         preco = modellist.get(position).preco;
 
                         item = new ModelItem(idEssencia, sabor, marca, preco);
+                        listaModellist.add(item);
 
                         //modellistSeleciona.add(item);
 
-                        SharedPreferences prefs;
-                        prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-                        SharedPreferences.Editor ed = prefs.edit();
-                        ed.putInt("idEssencia", idEssencia);
-                        ed.putString("sabor", sabor);
-                        ed.putString("marca", marca);
-                        ed.putString("preco", preco);
-                        ed.apply();
+                        int count = listaModellist.size();
+                        if(count > 0){
+                            SharedPreferences prefs;
+                            prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                            if(count == 1){
+                                SharedPreferences.Editor ed1 = prefs.edit();
+                                ed1.putInt("idEssencia1", listaModellist.get(0).getIdEssencia());
+                                ed1.putString("sabor1", listaModellist.get(0).getSabor());
+                                ed1.putString("marca1", listaModellist.get(0).getMarca());
+                                ed1.putString("preco1", listaModellist.get(0).getPreco());
+                                ed1.putInt("countEssencia", count);
+                                ed1.apply();
+                            }
+                            if(count == 2) {
+                                SharedPreferences.Editor ed2 = prefs.edit();
+                                ed2.putInt("idEssencia1", listaModellist.get(0).getIdEssencia());
+                                ed2.putString("sabor1", listaModellist.get(0).getSabor());
+                                ed2.putString("marca1", listaModellist.get(0).getMarca());
+                                ed2.putString("preco1", listaModellist.get(0).getPreco());
+                                ed2.putInt("countEssencia", count);
+                                ed2.apply();
+
+                                SharedPreferences.Editor ed3 = prefs.edit();
+                                ed3.putInt("idEssencia2", listaModellist.get(1).getIdEssencia());
+                                ed3.putString("sabor2", listaModellist.get(1).getSabor());
+                                ed3.putString("marca2", listaModellist.get(1).getMarca());
+                                ed3.putString("preco2", listaModellist.get(1).getPreco());
+                                ed3.apply();
+                            }
+
+                        }
 
                         //Intent intent = new Intent(mContext, ConfirmarPedido.class);
                         //intent.putExtra("Essencia", item);
@@ -139,41 +164,7 @@ public class ListViewAdapter extends BaseAdapter {
             public void onClick(View view) {
                 //code later
                 //onclick das imagens
-                //if (modellist.get(getItemId()){
-                  //    start NewActivity with title for actionbar and text for textview
-//                    Intent intent = new Intent(mContext, MainActivity.class);
-//                    intent.putExtra("actionBarTitle", "Battery");
-//                    intent.putExtra("contentTv", "This is Battery detail...");
-//                    mContext.startActivity(intent);
-//                }
-//                if (modellist.get(postition).getTitle().equals("Cpu")){
-//                    //start NewActivity with title for actionbar and text for textview
-//                    Intent intent = new Intent(mContext, MainActivity.class);
-//                    intent.putExtra("actionBarTitle", "Cpu");
-//                    intent.putExtra("contentTv", "This is Cpu detail...");
-//                    mContext.startActivity(intent);
-//                }
-//                if (modellist.get(postition).getTitle().equals("Display")){
-//                    //start NewActivity with title for actionbar and text for textview
-//                    Intent intent = new Intent(mContext, MainActivity.class);
-//                    intent.putExtra("actionBarTitle", "Display");
-//                    intent.putExtra("contentTv", "This is Display detail...");
-//                    mContext.startActivity(intent);
-//                }
-//                if (modellist.get(postition).getTitle().equals("Memory")){
-//                    //start NewActivity with title for actionbar and text for textview
-//                    Intent intent = new Intent(mContext, MainActivity.class);
-//                    intent.putExtra("actionBarTitle", "Memory");
-//                    intent.putExtra("contentTv", "This is Memory detail...");
-//                    mContext.startActivity(intent);
-//                }
-//                if (modellist.get(postition).getTitle().equals("Sensor")){
-//                    //start NewActivity with title for actionbar and text for textview
-//                    Intent intent = new Intent(mContext, MainActivity.class);
-//                    intent.putExtra("actionBarTitle", "Sensor");
-//                    intent.putExtra("contentTv", "This is Sensor detail...");
-//                    mContext.startActivity(intent);
-//                }
+                
             }
         });
 
