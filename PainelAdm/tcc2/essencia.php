@@ -22,14 +22,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
       if(isset($_GET["cadastrar"]) == "cadastrar"){
 
         $mysqlImg=false;
-        
+        $novo_nome='';
 
         $marcaEssencia = sanitize($_GET["marcaEssencia"]);
         $marcaEssencia = mysqli_real_escape_string($conn,$marcaEssencia);
 
         $preçoEssencia = sanitize(($_GET["preçoEssencia"]));
-        $preçoEssencia = mysqli_real_escape_string($conn,$preçoEssencia);
-        
+        $preçoEssencia = mysqli_real_escape_string($conn,$preçoEssencia]
+                
         $saborEssencia = sanitize(($_GET["saborEssencia"]));
         $saborEssencia = mysqli_real_escape_string($conn,$saborEssencia);
 
@@ -53,20 +53,34 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
           }
         }    
 */
+/*
+        if(file_exists($_FILES['image']['tmp_name'] ) ){
+            echo "No upload";
+         }
+         if(isset($_FILES['image']['tmp_name'] ) ){
+            echo "upload";
+         } 
+ 
 
-        if(isset($_FILES["image"])) {
 
-          echo "entrou no files";
 
-          $extensao = strtolower(substr($_FILES['image']['name'], -4));
+          $destino = 'tcc2/img/' . $_FILES['image']['name'];
 
-          $novo_nome = md5(time()) . $extensao;
+          $arquivo_tmp = $_FILES['image']['tmp_name'];
 
-          $diretorio = "tcc/img";  
+          echo $destino;
 
-          move_uploaded_file($_FILES['image']['tmp_name'], $diretorio.$novo_nome);      
+          move_uploaded_file($arquivo_tmp, $destino);
+*/
+          //$extensao = strtolower(substr($_FILES['image']['name'], -4));
 
-        }      
+          //$novo_nome = md5(time()) . $extensao;
+
+          //$diretorio = "tcc/img";  
+
+         //move_uploaded_file($_FILES['image']['tmp_name'], $diretorio.$novo_nome);      
+
+           
 
 
         if(empty($marcaEssencia) and empty($preçoEssencia) and empty($saborEssencia) and empty($categoriaEssencia) and empty($descricaEssencia) ) {
@@ -210,12 +224,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
            <ul class="sidebar navbar-nav">
                 <li>
                     <a href="pedidos.php">Pedidos</a>
-                </li>
-                <li>
-                    <a href="vendas.php">Vendas</a>
-                </li>
+                </li> 
                 <li class="active">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Produtos</a>
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown">Produtos</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
                             <a href="carvao.php">Carvão</a>
@@ -292,13 +303,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                 </select>
                                 <label for="exampleFormControlInput1">Marca</label>
                                 <input type="text" class="form-control" id="marcaEssencia" name="marcaEssencia" placeholder="Marca">
-                                <label for="exampleFormControlInput1">Preço</label>
-                                <input type="number" class="form-control" id="preçoEssencia" step="0.01" min="0" name="preçoEssencia" placeholder="Preço">
                                 <label for="exampleFormControlInput1">Descrição</label>
                                 <textarea class="form-control" id="descricaEssencia" name="descricaEssencia" placeholder="Insira a descrição da essência, tal como sensação de fumo e sugestões de combinação"></textarea> 
+                                <label for="exampleFormControlInput1">Preço</label>
+                                <input type="number" class="form-control" id="preçoEssencia" step="0.01" min="0" name="preçoEssencia" placeholder="Preço">
                               </div>  
                               <div class="col-md-6 "> 
-                                
+                                        <label for="exampleFormControlInput1">Preço</label>
+                                <input type="number" class="form-control" id="preçoEssencia" step="0.01" min="0" name="preçoEssencia" placeholder="Preço">
                                 <label for="exampleFormControlInput1">Sabor</label>
                                 <input type="text" class="form-control" id="saborEssencia" name="saborEssencia" placeholder="Sabor">
                                 <label for="exampleFormControlInput1">Quantidade de Caixas</label>

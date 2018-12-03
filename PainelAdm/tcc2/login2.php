@@ -73,7 +73,7 @@ if (!$login && $_SERVER["REQUEST_METHOD"] == "POST") {                          
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="icon" href="../../../../favicon.ico">
     </head>
-    <body class="text-center" style="background: #191c22">  
+    <body class="text-center">  
         <div class="container">
             <div class="row">
                 <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -85,21 +85,26 @@ if (!$login && $_SERVER["REQUEST_METHOD"] == "POST") {                          
                                     <a class="btn btn-primary" href=pedidos.php>Tela Inicial</a>
                                   <?php exit(); ?>
                                 <?php endif; ?>
+
+                                <?php if ($error): ?>
+                                    <h3 style="color:red;"><?php echo $error_msg; ?></h3>
+                                <?php endif; ?>
                             </h5>
-                            <form id="formulario" action="login.php" method="post"> 
-                                <img class="mb-4" src="http://localhost:8081/tcc2/img/arguile.jpg" alt="" width="150" height="150">
+                            <form class="form-signin" action="LoginServlet" method="post">
+                                <img class="mb-4" src="https://seeklogo.com/images/P/psicologia-logo-1E81DC14D9-seeklogo.com.png" alt="" width="72" height="72">
                                 <label type="text" class="sr-only">Endereço de email</label>
-                                 <input type="text" class="form-control" placeholder="Usuário" name="usuario" value="" required>
+                                <input type="email" id="inputEmail" class="form-control" placeholder="Login" name="login" required autofocus>
                                 <label for="inputPassword" class="sr-only">Senha</label>
-                                <input type="password" id="inputPassword" class="form-control" placeholder="Senha" name="senha"required>
+                                <input type="password" id="inputPassword" class="form-control" placeholder="Senha" name="password"required>
+                                <div class="checkbox mb-3">
+                                    <label>
+                                        <input type="checkbox" value="remember-me"> Lembrar de mim
+                                    </label>
+                                </div>
                                 <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
-                                <p class="mt-5 mb-3 text-muted"></p>
+                                <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
                             </form>
-                            <h3 style="color: red">
-                              <?php if ($error): ?>
-                                <?php echo $error_msg?>
-                              <?php endif; ?>
-                            </h3>
+                            <h3 style="color: red">${mensagem}</h3>
                         </div>
                     </div>
                 </div>

@@ -33,7 +33,7 @@ p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;
     font-weight: 300;
-    line-height: 1.7em;
+    line-height: 1.5em;
     color: #999;
 }
 
@@ -45,7 +45,7 @@ a, a:hover, a:focus {
 
 #sidebar {
     /* don't forget to add all the previously mentioned styles here too */
-    background: #7386D5;
+    /*background: #7386D5;*/
     color: #fff;
     transition: all 0.3s;
     /* min-width: 250px;
@@ -57,6 +57,7 @@ a, a:hover, a:focus {
     /* top layer */
     z-index: 9999;
 }
+
 #navloca{
 	background: #7386D5;
 }
@@ -78,7 +79,8 @@ a, a:hover, a:focus {
 
 #sidebar ul li a {
     padding: 10px;
-    font-size: 1.1em;
+    font-size: 1.8em;
+    font-family: Decorative;
 }
 #sidebar ul li a:hover {
     color: #7386D5;
@@ -90,7 +92,7 @@ a, a:hover, a:focus {
     background: #6d7fcc;
 }
 ul ul a {
-    font-size: 0.9em !important;
+    font-size: 1.4em !important;
     padding-left: 30px !important;
     background: #6d7fcc;
 }

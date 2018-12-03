@@ -165,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                     <a href="pedidos.php">Pedidos</a>
                 </li>
                 <li class="active">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Produtos</a>
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown">Produtos</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
                             <a href="carvao.php">Carvão</a>

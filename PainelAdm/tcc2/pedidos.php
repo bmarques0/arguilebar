@@ -1,4 +1,5 @@
 <?php
+
 require 'db_credentials.php';
 require "authenticate.php";
 
@@ -13,12 +14,19 @@ if (!$conn) {
        mysqli_connect_error());
 }
 
-$sql = "Select nomeMesa, sabor, group_concat(marca ORDER BY marca separator ', ') as marca, descricao, id_mesa, mesa_id_mesa
-FROM(
-  select m.nomeMesa, m.id_mesa, e.sabor, s.descricao, b.marca, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
-  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida ORDER BY m.nomeMesa
-) AS a
-group by nomeMesa";
+      $sql = "Select mm.nomeMesa, 
+  ee.sabor,
+  bb.marca,
+    mm.descricao, mm.id_mesa, mm.mesa_id_mesa
+ FROM(
+  (select m.nomeMesa, m.id_mesa, e.sabor, s.descricao, b.marca, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
+  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida ORDER BY m.nomeMesa) AS mm,
+  (select m.nomeMesa, m.id_mesa, s.descricao, group_concat(b.marca ORDER BY marca separator ' + ') as marca, p.mesa_id_mesa from mesa m, statuspedido s, pedido p, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
+  and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida GROUP BY m.nomeMesa) AS bb,
+  (select m.nomeMesa, m.id_mesa, group_concat(e.sabor ORDER BY sabor separator ' + ') as sabor, s.descricao, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe where p.mesa_id_mesa=m.id_mesa
+  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status GROUP BY m.nomeMesa) AS ee)
+WHERE mm.id_mesa=bb.id_mesa and ee.id_mesa=mm.id_mesa
+GROUP BY nomeMesa";
 
 
 if (isset($_GET["preparar"]) == "preparar") {
@@ -28,12 +36,19 @@ if (isset($_GET["preparar"]) == "preparar") {
             die("Problemas para alterar status do pedido!<br>".
                  mysqli_error($conn));
     }
-    $sql = "Select nomeMesa, sabor, group_concat(marca ORDER BY marca separator ', ') as marca, descricao, id_mesa, mesa_id_mesa
-FROM(
-  select m.nomeMesa, m.id_mesa, e.sabor, s.descricao, b.marca, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
-  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida ORDER BY m.nomeMesa
-) AS a
-group by nomeMesa";
+    $sql = "Select mm.nomeMesa, 
+  ee.sabor,
+  bb.marca,
+    mm.descricao, mm.id_mesa, mm.mesa_id_mesa
+ FROM(
+  (select m.nomeMesa, m.id_mesa, e.sabor, s.descricao, b.marca, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
+  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida ORDER BY m.nomeMesa) AS mm,
+  (select m.nomeMesa, m.id_mesa, s.descricao, group_concat(b.marca ORDER BY marca separator ' + ') as marca, p.mesa_id_mesa from mesa m, statuspedido s, pedido p, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
+  and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida GROUP BY m.nomeMesa) AS bb,
+  (select m.nomeMesa, m.id_mesa, group_concat(e.sabor ORDER BY sabor separator ' + ') as sabor, s.descricao, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe where p.mesa_id_mesa=m.id_mesa
+  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status GROUP BY m.nomeMesa) AS ee)
+WHERE mm.id_mesa=bb.id_mesa and ee.id_mesa=mm.id_mesa
+GROUP BY nomeMesa";
 
 }elseif(isset($_GET["finalizar"]) == "finalizar"){
     $id=$_GET["finalizar"];
@@ -42,12 +57,19 @@ group by nomeMesa";
             die("Problemas para alterar status do pedido!<br>".
                  mysqli_error($conn));
     }
-    $sql = "Select nomeMesa, sabor, group_concat(marca ORDER BY marca separator ', ') as marca, descricao, id_mesa, mesa_id_mesa
-FROM(
-  select m.nomeMesa, m.id_mesa, e.sabor, s.descricao, b.marca, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
-  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida ORDER BY m.nomeMesa
-) AS a
-group by nomeMesa";
+    $sql = "Select mm.nomeMesa, 
+  ee.sabor,
+  bb.marca,
+    mm.descricao, mm.id_mesa, mm.mesa_id_mesa
+ FROM(
+  (select m.nomeMesa, m.id_mesa, e.sabor, s.descricao, b.marca, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
+  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida ORDER BY m.nomeMesa) AS mm,
+  (select m.nomeMesa, m.id_mesa, s.descricao, group_concat(b.marca ORDER BY marca separator ' + ') as marca, p.mesa_id_mesa from mesa m, statuspedido s, pedido p, bebida b, pedido_bebida pb where p.mesa_id_mesa=m.id_mesa
+  and s.id_status=p.status_id_status and p.mesa_id_mesa=pb.pedido_id_pedido and b.id_prodDiversos=pb.bebida_id_bebida GROUP BY m.nomeMesa) AS bb,
+  (select m.nomeMesa, m.id_mesa, group_concat(e.sabor ORDER BY sabor separator ' + ') as sabor, s.descricao, p.mesa_id_mesa from mesa m, essencia e, statuspedido s, pedido p, pedido_essencia pe where p.mesa_id_mesa=m.id_mesa
+  and pe.pedido_id_pedido=p.mesa_id_mesa and pe.essencia_id_essencia=e.id_essencia and s.id_status=p.status_id_status GROUP BY m.nomeMesa) AS ee)
+WHERE mm.id_mesa=bb.id_mesa and ee.id_mesa=mm.id_mesa
+GROUP BY nomeMesa";
 }
 
 if(!($pedidos = mysqli_query($conn,$sql))){
@@ -135,11 +157,9 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
                 <li>
                     <a href="pedidos.php">Pedidos</a>
                 </li>
-                <li>
-                    <a href="vendas.php">Vendas</a>
-                </li>
+
                 <li class="active">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Produtos</a>
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown">Produtos</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
                             <a href="carvao.php">Carvão</a>
@@ -218,9 +238,9 @@ if(!($funcionarios = mysqli_query($conn,$sql))){
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <?php if(isset($pedidos)){ ?>
-                                    <?php if(mysqli_num_rows($pedidos) > 0): ?>
-                                      <?php while($uni = mysqli_fetch_assoc($pedidos)): ?> 
+                                  <?php if(isset($pedidos) ) { ?>
+                                    <?php if((mysqli_num_rows($pedidos) > 0) ): ?>
+                                      <?php while($uni = mysqli_fetch_assoc($pedidos) ): ?> 
                                         <?php echo '<tr><td>'. $uni["nomeMesa"] . '</td><td>' . $uni["sabor"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["descricao"] . '</td><td>' . '<button class="btn btn-primary" type="submit" id="preparar" class="floated" name="preparar" value='.$uni["mesa_id_mesa"].'>Preparar</button>' . ' ' . '<button class="btn btn-primary" type="submit" id="finalizar" class="floated" name="finalizar" value='.$uni["mesa_id_mesa"].'>Finalizar</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>

@@ -180,11 +180,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                 <li>
                     <a href="pedidos.php">Pedidos</a>
                 </li>
-                <li>
-                    <a href="vendas.php">Vendas</a>
-                </li>
                 <li class="active">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Produtos</a>
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown">Produtos</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
                             <a href="carvao.php">Carvão</a>
@@ -280,7 +277,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                               <table class="table table-bordered" id="tableResultado" width="100%" cellspacing="0">
                                 <thead>
                                   <tr>
-                                    <th>ID Mangueira</th>
                                     <th>Marca</th>
                                     <th>Cor</th>
                                     <th>Material</th>
@@ -294,7 +290,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
                                   <?php if(isset($mangueiras)){ ?>
                                     <?php if(mysqli_num_rows($mangueiras) > 0): ?>
                                       <?php while($uni = mysqli_fetch_assoc($mangueiras)): ?> 
-                                        <?php echo '<tr><td>'. $uni["id_mangueira"] . '</td><td>' . $uni["marca"] . '</td><td>' . $uni["cor"] . '</td><td>' . $uni["material"] . '</td><td>' . $uni["comprimento"] . '</td><td>'. $uni["quantidade"] . '</td><td>'. 'R$ ' . $uni["preco"] . '</td><td>' . '<a class="btn btn-primary" href=mangueiraEdit.php?id='.$uni["id_mangueira"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_mangueira"].'>Excluir</button>' . '</td></tr>' ?>
+                                        <?php echo '<tr><td>'. $uni["marca"] . '</td><td>' . $uni["cor"] . '</td><td>' . $uni["material"] . '</td><td>' . $uni["comprimento"] . '</td><td>'. $uni["quantidade"] . '</td><td>'. 'R$ ' . $uni["preco"] . '</td><td>' . '<a class="btn btn-primary" href=mangueiraEdit.php?id='.$uni["id_mangueira"]. '>Editar</a>' .  ' ' . '<button class="btn btn-primary" type="submit" id="excluir" class="floated" name="excluir" value='.$uni["id_mangueira"].'>Excluir</button>' . '</td></tr>' ?>
 
                                       <?php endwhile; ?>
                                     <?php else: ?>
